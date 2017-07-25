@@ -16,8 +16,9 @@ public class FlyingObject extends Image {
     private MyGame game;
     private FlyingObjectType objectType;
 
-    private static final String MONEY = "img/money.png";
-    private static final String BOOKS = "img/books.png";
+    private static final String ASTRONAUT = "img/astronaut.png";
+    private static final String METEOR = "img/meteor.png";
+    private static final String UFO = "img/ufo.png";
 
     private final static int WIDTH = 65;
     private final static int HEIGHT = 65;
@@ -42,31 +43,30 @@ public class FlyingObject extends Image {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-               // reactOnClick();
+                reactOnClick();
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
     }
 
-  /*  private void reactOnClick() {
-        if (FlyingObjectType.PASSIVE.equals(objectType)) {
-            game.scoreService.addToPassiveIncome(1);
-            game.soundService.playBookSound();
-        } else if (FlyingObjectType.MONEY.equals(objectType)) {
-            game.scoreService.addPoints(150);
-            game.soundService.playMoneySound();
-        }
+    private void reactOnClick() {
+
 
         this.remove();
     }
 
-*/
+
     private static String getFlyingObjectType(FlyingObjectType type) {
-        if (FlyingObjectType.MONEY.equals(type)) {
-            return MONEY;
-        } else if (FlyingObjectType.PASSIVE.equals(type)) {
-            return BOOKS;
+        if (FlyingObjectType.UFO.equals(type)) {
+            return UFO;
+
+        } else if (FlyingObjectType.ASTRONAUT.equals(type)) {
+            return ASTRONAUT;
+
+        } else if (FlyingObjectType.METEOR.equals(type)) {
+            return METEOR;
         }
+
         return "";
     }
 

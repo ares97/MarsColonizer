@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.IClickCallback;
 import com.mygdx.game.MyGame;
+import com.mygdx.game.controllers.FlyingObjectsController;
 import com.mygdx.game.entites.Player;
 import com.mygdx.game.ui.ClickOnPlayerButton;
 
@@ -13,7 +14,7 @@ import com.mygdx.game.ui.ClickOnPlayerButton;
 public class GameplayScreen extends BasicScreen {
     private Image backgroundImg;
     private Player player;
-
+    private FlyingObjectsController flyingObjectController;
 
     public GameplayScreen(MyGame myGame){
         super(myGame);
@@ -26,8 +27,13 @@ public class GameplayScreen extends BasicScreen {
         initBackground();
         initPlayer();
         handleClickArea();
-
+        initFlyingObjectController();
         // TODO add clouds and events under them
+    }
+
+    private void initFlyingObjectController() {
+        flyingObjectController = new FlyingObjectsController(myGame,stage);
+
     }
 
     private void handleClickArea() {
