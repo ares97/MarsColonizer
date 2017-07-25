@@ -50,8 +50,6 @@ public class FlyingObject extends Image {
     }
 
     private void reactOnClick() {
-
-
         this.remove();
     }
 

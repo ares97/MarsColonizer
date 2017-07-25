@@ -38,4 +38,30 @@ public class ScoreService {
 
         prefs.flush();
     }
+
+    public void addBasalt(int amount) {
+        basalt += amount;
+    }
+
+    public void addPassiveBasalt(int amount) {
+        passiveBasalt += passiveBasalt;
+    }
+
+
+    // getters and setters ---------------
+    public long getBasalt() {
+        return basalt;
+    }
+
+    public void setBasalt(long basalt) {
+        this.basalt = basalt;
+    }
+
+    public long getPassiveBasalt() {
+        return passiveBasalt;
+    }
+
+    public void setPassiveBasalt(long passiveBasalt) {
+        this.passiveBasalt = passiveBasalt;
+    }
 }

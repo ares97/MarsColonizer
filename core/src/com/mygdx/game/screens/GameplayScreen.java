@@ -41,6 +41,7 @@ public class GameplayScreen extends BasicScreen {
             @Override
             public void onClick() {
                 player.performClickEffect();
+                myGame.soundService.playClick();
             }
         });
         stage.addActor(clickOnPlayerButton);

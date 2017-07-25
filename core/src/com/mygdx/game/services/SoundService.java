@@ -21,13 +21,16 @@ public class SoundService {
 
     private void initAudio() {
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/bgMusic.ogg"));
-
+        clickSound = Gdx.audio.newSound(Gdx.files.internal("audio/click.ogg"));
     }
 
     public void playBgMusic() {
         bgMusic.play();
         bgMusic.setLooping(true);
-        bgMusic.setVolume(0.5f);
+        bgMusic.setVolume(0.7f);
+    }
+    public void playClick(){
+        clickSound.setVolume(clickSound.play(),0.4f);
     }
 
 
