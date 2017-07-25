@@ -1,8 +1,6 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.MyGame;
 
@@ -34,7 +32,7 @@ public class SplashScreen extends BasicScreen {
         super.render(delta);
 
         spriteBatch.begin();
-        spriteBatch.draw(splashImg,MyGame.WIDTH/2-200,MyGame.HEIGHT/2-200,400,400);
+        spriteBatch.draw(splashImg,MyGame.GAME_WIDTH /2-200,MyGame.GAME_HEIGHT /2-200,400,400);
         spriteBatch.end();
     }
 }

@@ -25,7 +25,7 @@ public abstract class BasicScreen implements Screen {
 
         createCamera();
 
-        stage = new Stage(new StretchViewport(MyGame.WIDTH, MyGame.HEIGHT,camera));
+        stage = new Stage(new StretchViewport(MyGame.GAME_WIDTH, MyGame.GAME_HEIGHT,camera));
         Gdx.input.setInputProcessor(stage);
         spriteBatch = new SpriteBatch();
 
@@ -36,7 +36,7 @@ public abstract class BasicScreen implements Screen {
 
     private void createCamera() {
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, MyGame.WIDTH, MyGame.HEIGHT);
+        camera.setToOrtho(false, MyGame.GAME_WIDTH, MyGame.GAME_HEIGHT);
         camera.update();
     }
 
