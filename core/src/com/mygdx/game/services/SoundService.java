@@ -11,8 +11,7 @@ import com.badlogic.gdx.audio.Sound;
 public class SoundService {
     private Music bgMusic;
     private Sound clickSound;
-    private Sound bookSound;
-    private Sound moneySound;
+
 
 
     public SoundService() {
@@ -27,10 +26,14 @@ public class SoundService {
     public void playBgMusic() {
         bgMusic.play();
         bgMusic.setLooping(true);
-        bgMusic.setVolume(0.7f);
     }
     public void playClick(){
         clickSound.setVolume(clickSound.play(),0.4f);
+    }
+
+    public void disposeAudio(){
+        bgMusic.dispose();
+        clickSound.dispose();
     }
 
 

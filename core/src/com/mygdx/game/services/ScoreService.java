@@ -9,11 +9,20 @@ import com.mygdx.game.MyGame;
  */
 public class ScoreService {
     public final static String SCORE_BASALT = "com.mygdx.game.prefs.scoreBasalt";
+    public final static String BASALT_PER_CLICK = "com.mygdx.game.prefs.basaltPerClick";
     public final static String SCORE_PASSIVE_BASALT = "com.mygdx.game.prefs.scorePassiveBasalt";
-    public final static String SCORE_DIAMONDS = "com.mygdx.game.prefs.scoreDiamond";
 
-    public long basalt;
-    public long passiveBasalt;
+    private long basalt;
+    private long passiveBasalt;
+    private int basaltPerClick;
+
+    public int getBasaltPerClick() {
+        return basaltPerClick;
+    }
+
+    public void setBasaltPerClick(int basaltPerClick) {
+        this.basaltPerClick = basaltPerClick;
+    }
 
     private Preferences prefs;
 
@@ -28,27 +37,33 @@ public class ScoreService {
     }
 
     private void loadScoreDataFromPrefs() {
-        basalt = prefs.getInteger(SCORE_BASALT);
-        passiveBasalt = prefs.getInteger(SCORE_PASSIVE_BASALT);
+        basalt = prefs.getLong(SCORE_BASALT);
+        passiveBasalt = prefs.getLong(SCORE_PASSIVE_BASALT);
+        basaltPerClick = prefs.getInteger(SCORE_PASSIVE_BASALT);
+
+        if(basaltPerClick <= 0)
+            basaltPerClick = 1;
     }
 
     public void saveScoreDataToPrefs() {
         prefs.putLong(SCORE_BASALT, basalt);
         prefs.putLong(SCORE_PASSIVE_BASALT, passiveBasalt);
+        prefs.putInteger(BASALT_PER_CLICK, basaltPerClick);
 
         prefs.flush();
     }
 
-    public void addBasalt(int amount) {
-        basalt += amount;
+    public void addBasaltForClick() {
+        basalt += basaltPerClick;
     }
 
-    public void addPassiveBasalt(int amount) {
+    public void addToPassiveBasalt(int amount) {
         passiveBasalt += passiveBasalt;
     }
 
 
     // getters and setters ---------------
+
     public long getBasalt() {
         return basalt;
     }

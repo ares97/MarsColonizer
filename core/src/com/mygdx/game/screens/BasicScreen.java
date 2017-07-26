@@ -28,7 +28,6 @@ public abstract class BasicScreen implements Screen {
         stage = new Stage(new StretchViewport(MyGame.GAME_WIDTH, MyGame.GAME_HEIGHT,camera));
         Gdx.input.setInputProcessor(stage);
         spriteBatch = new SpriteBatch();
-
         init();
     }
 
@@ -81,6 +80,7 @@ public abstract class BasicScreen implements Screen {
 
     @Override
     public void dispose() {
+        myGame.soundService.disposeAudio();
         myGame.dispose();
     }
 }

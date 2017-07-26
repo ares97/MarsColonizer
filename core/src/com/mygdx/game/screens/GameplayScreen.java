@@ -1,12 +1,20 @@
 package com.mygdx.game.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.IClickCallback;
 import com.mygdx.game.MyGame;
 import com.mygdx.game.controllers.FlyingObjectsController;
 import com.mygdx.game.entites.Player;
 import com.mygdx.game.ui.ClickOnPlayerButton;
+import com.mygdx.game.ui.GameLabel;
 
 /**
  * Created by ares on 25.07.17.
@@ -15,6 +23,8 @@ public class GameplayScreen extends BasicScreen {
     private Image backgroundImg;
     private Player player;
     private FlyingObjectsController flyingObjectController;
+    private GameLabel scoreLabel;
+    private ProgressBar bar;
 
     public GameplayScreen(MyGame myGame){
         super(myGame);
@@ -27,8 +37,16 @@ public class GameplayScreen extends BasicScreen {
         initBackground();
         initPlayer();
         handleClickArea();
+        initScoreLabel();
         initFlyingObjectController();
         // TODO add clouds and events under them
+    }
+
+
+
+    private void initScoreLabel() {
+        scoreLabel = new GameLabel(40,650);
+        stage.addActor(scoreLabel);
     }
 
     private void initFlyingObjectController() {
@@ -42,6 +60,7 @@ public class GameplayScreen extends BasicScreen {
             public void onClick() {
                 player.performClickEffect();
                 myGame.soundService.playClick();
+                myGame.scoreService.addBasaltForClick();
             }
         });
         stage.addActor(clickOnPlayerButton);
@@ -62,7 +81,6 @@ public class GameplayScreen extends BasicScreen {
     public void render(float delta) {
         super.render(delta);
         update();
-
         spriteBatch.begin();
         stage.draw();
         spriteBatch.end();
@@ -70,6 +88,8 @@ public class GameplayScreen extends BasicScreen {
     }
 
     private void update() {
+        scoreLabel.setText("Basalt:  "+ myGame.scoreService.getBasalt());
         stage.act();
     }
+
 }

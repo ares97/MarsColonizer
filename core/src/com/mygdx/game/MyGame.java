@@ -35,4 +35,5 @@ public class MyGame extends Game {
         soundService = new SoundService();
         soundService.playBgMusic();
     }
+
 }

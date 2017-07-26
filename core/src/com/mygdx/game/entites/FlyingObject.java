@@ -20,8 +20,8 @@ public class FlyingObject extends Image {
     private static final String METEOR = "img/meteor.png";
     private static final String UFO = "img/ufo.png";
 
-    private final static int WIDTH = 65;
-    private final static int HEIGHT = 65;
+    private final static int WIDTH = 75;
+    private final static int HEIGHT = 75;
 
     private final static int STARTING_X_1 = 0;
     private final static int STARTING_X_2 = MyGame.GAME_WIDTH;
@@ -50,6 +50,16 @@ public class FlyingObject extends Image {
     }
 
     private void reactOnClick() {
+        if(FlyingObjectType.ASTRONAUT.equals(objectType)){
+            // ADD PASSIVE BASALT
+        }
+        else if(FlyingObjectType.UFO.equals(objectType)){
+            // add diamond?
+        }
+        else if(FlyingObjectType.METEOR.equals(objectType)){
+            // add stone
+        }
+
         this.remove();
     }
 
@@ -76,8 +86,8 @@ public class FlyingObject extends Image {
             xSign = -1;
         }
 
-        int time1 = MathUtils.random(1, 4);
-        int time2 = MathUtils.random(1, 4);
+        int time1 = MathUtils.random(1, 3);
+        int time2 = MathUtils.random(1, 3);
 
         int randomYEffect = MathUtils.random(-100, 500);
 
