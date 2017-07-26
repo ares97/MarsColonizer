@@ -1,5 +1,6 @@
 package com.mygdx.game.entites;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -7,13 +8,15 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.game.IClickCallback;
 import com.mygdx.game.MyGame;
+import com.mygdx.game.ui.DialogMessage;
 
 /**
  * Created by ares on 25.07.17.
  */
 public class FlyingObject extends Image {
-    private MyGame game;
+    private MyGame myGame;
     private FlyingObjectType objectType;
 
     private static final String ASTRONAUT = "img/astronaut.png";
@@ -30,7 +33,7 @@ public class FlyingObject extends Image {
 
     public FlyingObject(MyGame game, FlyingObjectType type) {
         super(new Texture(getFlyingObjectType(type)));
-        this.game = game;
+        this.myGame = game;
         this.objectType = type;
 
         this.setOrigin(WIDTH / 2, HEIGHT / 2);
@@ -50,16 +53,26 @@ public class FlyingObject extends Image {
     }
 
     private void reactOnClick() {
+        final DialogMessage dialogButton = new DialogMessage(new IClickCallback() {
+            @Override
+            public void onClick() {
+            }
+        });
+
         if(FlyingObjectType.ASTRONAUT.equals(objectType)){
-            // ADD PASSIVE BASALT
+            myGame.scoreService.addToPassiveBasalt(1);
+            dialogButton.setText("That's looks like You gonna have slave!\n(+1 basalt/sec)", Color.CORAL);
         }
         else if(FlyingObjectType.UFO.equals(objectType)){
-            // add diamond?
+            myGame.scoreService.addToDiamonds(1);
+            dialogButton.setText("After breaking space ship apart you've found diamond in it!\n(+1 diamond)", Color.GOLD);
         }
         else if(FlyingObjectType.METEOR.equals(objectType)){
-            // add stone
+            myGame.scoreService.addToBasalt(150);
+            dialogButton.setText("Just more basalt...\n(+150 basalt)", Color.GRAY);
         }
 
+        getStage().addActor(dialogButton);
         this.remove();
     }
 

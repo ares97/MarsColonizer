@@ -11,10 +11,12 @@ public class ScoreService {
     public final static String SCORE_BASALT = "com.mygdx.game.prefs.scoreBasalt";
     public final static String BASALT_PER_CLICK = "com.mygdx.game.prefs.basaltPerClick";
     public final static String SCORE_PASSIVE_BASALT = "com.mygdx.game.prefs.scorePassiveBasalt";
+    public final static String SCORE_DIAMONDS = "com.mygdx.game.prefs.scoreDiamonds";
 
     private long basalt;
     private long passiveBasalt;
     private int basaltPerClick;
+    private long diamonds;
 
     public int getBasaltPerClick() {
         return basaltPerClick;
@@ -26,11 +28,11 @@ public class ScoreService {
 
     private Preferences prefs;
 
-
     public ScoreService() {
         initPrefs();
         loadScoreDataFromPrefs();
     }
+
 
     private void initPrefs() {
         prefs = Gdx.app.getPreferences(MyGame.GAME_PREFS);
@@ -40,6 +42,7 @@ public class ScoreService {
         basalt = prefs.getLong(SCORE_BASALT);
         passiveBasalt = prefs.getLong(SCORE_PASSIVE_BASALT);
         basaltPerClick = prefs.getInteger(SCORE_PASSIVE_BASALT);
+        diamonds = prefs.getLong(SCORE_DIAMONDS);
 
         if(basaltPerClick <= 0)
             basaltPerClick = 1;
@@ -49,6 +52,7 @@ public class ScoreService {
         prefs.putLong(SCORE_BASALT, basalt);
         prefs.putLong(SCORE_PASSIVE_BASALT, passiveBasalt);
         prefs.putInteger(BASALT_PER_CLICK, basaltPerClick);
+        prefs.putLong(SCORE_DIAMONDS, diamonds);
 
         prefs.flush();
     }
@@ -61,8 +65,12 @@ public class ScoreService {
         passiveBasalt += passiveBasalt;
     }
 
+    public void addToBasalt(int i){
+        basalt += i;
+    }
 
     // getters and setters ---------------
+
 
     public long getBasalt() {
         return basalt;
@@ -78,5 +86,17 @@ public class ScoreService {
 
     public void setPassiveBasalt(long passiveBasalt) {
         this.passiveBasalt = passiveBasalt;
+    }
+
+    public long getDiamonds() {
+        return diamonds;
+    }
+
+    public void setDiamonds(long diamonds) {
+        this.diamonds = diamonds;
+    }
+
+    public void addToDiamonds(int i) {
+        diamonds += i;
     }
 }

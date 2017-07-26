@@ -1,14 +1,8 @@
 package com.mygdx.game.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.IClickCallback;
 import com.mygdx.game.MyGame;
 import com.mygdx.game.controllers.FlyingObjectsController;
@@ -39,6 +33,8 @@ public class GameplayScreen extends BasicScreen {
         handleClickArea();
         initScoreLabel();
         initFlyingObjectController();
+
+
         // TODO add clouds and events under them
     }
 
@@ -88,7 +84,8 @@ public class GameplayScreen extends BasicScreen {
     }
 
     private void update() {
-        scoreLabel.setText("Basalt:  "+ myGame.scoreService.getBasalt());
+        scoreLabel.setText("Basalt:  "+ myGame.scoreService.getBasalt() +
+                            "\nDiamonds: " + myGame.scoreService.getDiamonds());
         stage.act();
     }
 
