@@ -1,13 +1,15 @@
 package com.mygdx.game.screens;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.IClickCallback;
 import com.mygdx.game.MyGame;
 import com.mygdx.game.controllers.FlyingObjectsController;
 import com.mygdx.game.entites.Player;
 import com.mygdx.game.ui.ClickOnPlayerButton;
+import com.mygdx.game.ui.DialogMessage;
 import com.mygdx.game.ui.GameLabel;
 
 /**
@@ -18,12 +20,11 @@ public class GameplayScreen extends BasicScreen {
     private Player player;
     private FlyingObjectsController flyingObjectController;
     private GameLabel scoreLabel;
-    private ProgressBar bar;
 
-    public GameplayScreen(MyGame myGame){
+
+    public GameplayScreen(MyGame myGame) {
         super(myGame);
     }
-
 
 
     @Override
@@ -31,22 +32,47 @@ public class GameplayScreen extends BasicScreen {
         initBackground();
         initPlayer();
         handleClickArea();
+        initWelcomeDialog();
         initScoreLabel();
         initFlyingObjectController();
-
-
+        initPassiveIncome();
         // TODO add clouds and events under them
     }
 
 
+    private void initWelcomeDialog() {
+
+        if (myGame.scoreService.getOfflineIncome() > 0) {
+            DialogMessage dialogMessage = new DialogMessage(new IClickCallback() {
+                @Override
+                public void onClick() {
+                    myGame.scoreService.addToBasalt(myGame.scoreService.getOfflineIncome());
+                }
+            });
+            dialogMessage.setText("OFFLINE BA$ALT INCOME: " + myGame.scoreService.getOfflineIncome() + "!\n" +
+                    "Watch ad to TRIPLE your offline income.", Color.GOLD);
+
+            stage.addActor(dialogMessage);
+        }
+    }
+
+    private void initPassiveIncome() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                myGame.scoreService.addToBasalt(myGame.scoreService.getPassiveBasalt());
+            }
+        }, 0, 1f, Integer.MAX_VALUE);
+    }
+
 
     private void initScoreLabel() {
-        scoreLabel = new GameLabel(40,650);
+        scoreLabel = new GameLabel(40, 650);
         stage.addActor(scoreLabel);
     }
 
     private void initFlyingObjectController() {
-        flyingObjectController = new FlyingObjectsController(myGame,stage);
+        flyingObjectController = new FlyingObjectsController(myGame, stage);
 
     }
 
@@ -84,8 +110,9 @@ public class GameplayScreen extends BasicScreen {
     }
 
     private void update() {
-        scoreLabel.setText("Basalt:  "+ myGame.scoreService.getBasalt() +
-                            "\nDiamonds: " + myGame.scoreService.getDiamonds());
+        scoreLabel.setText("Basalt:  " + myGame.scoreService.getBasalt() +
+                "\n" + myGame.scoreService.getPassiveBasalt() + " basalt/sec" +
+                "\nDiamonds: " + myGame.scoreService.getDiamonds());
         stage.act();
     }
 

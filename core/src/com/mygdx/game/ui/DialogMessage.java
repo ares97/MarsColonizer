@@ -20,6 +20,18 @@ public class DialogMessage extends Dialog {
         init(callback);
     }
 
+    public DialogMessage() {
+        super("",getDialogButtonStyle());
+
+        init();
+    }
+
+    private void init() {
+        setWidth(MyGame.GAME_WIDTH);
+        setHeight(180);
+        setPosition(330,100);
+    }
+
     private void init(final IClickCallback callback) {
         setWidth(MyGame.GAME_WIDTH);
         setHeight(180);
@@ -33,6 +45,8 @@ public class DialogMessage extends Dialog {
             }
         });
     }
+
+
 
     private static WindowStyle getDialogButtonStyle() {
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("img/ui-blue.atlas"));

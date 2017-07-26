@@ -2,7 +2,6 @@ package com.mygdx.game.controllers;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.MyGame;
 import com.mygdx.game.entites.FlyingObject;
@@ -30,8 +29,8 @@ public class FlyingObjectsController {
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        addRandomFlyingObjectToStage();
-                        randomizeSpawnTime();
+                            addRandomFlyingObjectToStage();
+                            randomizeSpawnTime();
                     }
                 }, spawnTime);
             }

@@ -53,7 +53,7 @@ public class FlyingObject extends Image {
     }
 
     private void reactOnClick() {
-        final DialogMessage dialogButton = new DialogMessage(new IClickCallback() {
+        final DialogMessage dialogMssg = new DialogMessage(new IClickCallback() {
             @Override
             public void onClick() {
             }
@@ -61,18 +61,18 @@ public class FlyingObject extends Image {
 
         if(FlyingObjectType.ASTRONAUT.equals(objectType)){
             myGame.scoreService.addToPassiveBasalt(1);
-            dialogButton.setText("That's looks like You gonna have slave!\n(+1 basalt/sec)", Color.CORAL);
+            dialogMssg.setText("That's looks like You gonna have slave!\n(+1 basalt/sec)", Color.CORAL);
         }
         else if(FlyingObjectType.UFO.equals(objectType)){
             myGame.scoreService.addToDiamonds(1);
-            dialogButton.setText("After breaking space ship apart you've found diamond in it!\n(+1 diamond)", Color.GOLD);
+            dialogMssg.setText("After breaking space ship apart you've found diamond in it!\n(+1 diamond)", Color.GOLD);
         }
         else if(FlyingObjectType.METEOR.equals(objectType)){
             myGame.scoreService.addToBasalt(150);
-            dialogButton.setText("Just more basalt...\n(+150 basalt)", Color.GRAY);
+            dialogMssg.setText("Just more basalt...\n(+150 basalt)", Color.GRAY);
         }
 
-        getStage().addActor(dialogButton);
+        getStage().addActor(dialogMssg);
         this.remove();
     }
 
