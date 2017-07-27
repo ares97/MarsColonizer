@@ -61,7 +61,7 @@ public class ScoreService {
     private void loadScoreDataFromPrefs() {
         basalt = prefs.getLong(SCORE_BASALT);
         passiveBasalt = prefs.getLong(SCORE_PASSIVE_BASALT);
-        basaltPerClick = prefs.getInteger(SCORE_PASSIVE_BASALT);
+        basaltPerClick = prefs.getInteger(BASALT_PER_CLICK);
         diamonds = prefs.getLong(SCORE_DIAMONDS);
         offlinePassiveIncomeMultiple = prefs.getFloat(OFFLINE_PASSIVE_MULTIPLY);
 

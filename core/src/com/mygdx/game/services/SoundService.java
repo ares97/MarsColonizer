@@ -26,9 +26,10 @@ public class SoundService {
     public void playBgMusic() {
         bgMusic.play();
         bgMusic.setLooping(true);
+        bgMusic.setVolume(0.7f);
     }
     public void playClick(){
-        clickSound.setVolume(clickSound.play(),0.4f);
+        clickSound.setVolume(clickSound.play(),0.2f);
     }
 
     public void disposeAudio(){

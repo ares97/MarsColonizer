@@ -8,9 +8,7 @@ import com.mygdx.game.IClickCallback;
 import com.mygdx.game.MyGame;
 import com.mygdx.game.controllers.FlyingObjectsController;
 import com.mygdx.game.entites.Player;
-import com.mygdx.game.ui.ClickOnPlayerButton;
-import com.mygdx.game.ui.DialogMessage;
-import com.mygdx.game.ui.GameLabel;
+import com.mygdx.game.ui.*;
 
 /**
  * Created by ares on 25.07.17.
@@ -20,7 +18,8 @@ public class GameplayScreen extends BasicScreen {
     private Player player;
     private FlyingObjectsController flyingObjectController;
     private GameLabel scoreLabel;
-
+    private MenuButton menuButton;
+    private OptionsButton optionsButton;
 
     public GameplayScreen(MyGame myGame) {
         super(myGame);
@@ -36,7 +35,32 @@ public class GameplayScreen extends BasicScreen {
         initScoreLabel();
         initFlyingObjectController();
         initPassiveIncome();
+        initMenuButton();
+        initOptionsButton();
         // TODO add clouds and events under them
+    }
+
+    private void initOptionsButton() {
+        optionsButton = new OptionsButton(new IClickCallback() {
+            @Override
+            public void onClick() {
+
+            }
+        });
+        optionsButton.setPosition(420,590);
+
+        stage.addActor(optionsButton);
+    }
+
+    private void initMenuButton() {
+        menuButton = new MenuButton(new IClickCallback() {
+            @Override
+            public void onClick() {
+            }
+        }, "Shop");
+        menuButton.setPosition(320,590);
+        menuButton.setWidth(80);
+        stage.addActor(menuButton);
     }
 
 
@@ -67,7 +91,7 @@ public class GameplayScreen extends BasicScreen {
 
 
     private void initScoreLabel() {
-        scoreLabel = new GameLabel(40, 650);
+        scoreLabel = new GameLabel(40, 600);
         stage.addActor(scoreLabel);
     }
 

@@ -16,7 +16,7 @@ public class Player extends Image {
     public final static int PLAYER_HEIGHT = 275;
 
     public final static int STARTING_X = MyGame.GAME_WIDTH /2 - PLAYER_WIDTH/2;
-    public final static int STARTING_Y = MyGame.GAME_HEIGHT /2 - PLAYER_HEIGHT/3;
+    public final static int STARTING_Y = MyGame.GAME_HEIGHT /2 - PLAYER_HEIGHT/3 - 50;
 
 
     public Player() {
@@ -39,4 +39,4 @@ public class Player extends Image {
 
         addAction(moveAction);
     }
-}
+}t

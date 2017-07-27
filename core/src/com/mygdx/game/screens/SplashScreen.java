@@ -28,7 +28,7 @@ public class SplashScreen extends BasicScreen {
                 myGame.setScreen(new GameplayScreen(myGame));
                 disposeSplashScreen();
             }
-        }, 2.4f);
+        }, 0.4f);
     }
 
     @Override
