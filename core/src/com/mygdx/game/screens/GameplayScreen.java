@@ -22,7 +22,8 @@ public class GameplayScreen extends BasicScreen {
     private GameLabel scoreLabel;
     private MenuButton menuButton;
     private OptionsButton optionsButton;
-    private GameMenu gameMenu;
+    private ScrollMenu gameMenu;
+    private ScrollMenu optionsMenu;
 
     public GameplayScreen(MyGame myGame) {
         super(myGame);
@@ -41,11 +42,20 @@ public class GameplayScreen extends BasicScreen {
         initOptionsButton();
         initShopMenuIcon();
         initShopMenu();
+        InitOptions();
         // TODO add clouds and events under them
     }
 
+    private void InitOptions() {
+        optionsMenu = new ScrollMenu();
+        stage.addActor(optionsMenu);
+        optionsMenu.setHeight(200);
+        optionsMenu.content.add(new Image(optionsMenu.skin.getDrawable("icon_sound_on")));
+        optionsMenu.content.add(new Image(optionsMenu.skin.getDrawable("icon_music")));
+    }
+
     private void initShopMenu() {
-        gameMenu = new GameMenu();
+        gameMenu = new ScrollMenu();
         stage.addActor(gameMenu);
         gameMenu.setVisible(false);
 
@@ -64,7 +74,10 @@ public class GameplayScreen extends BasicScreen {
         optionsButton = new OptionsButton(new IClickCallback() {
             @Override
             public void onClick() {
-
+                if(optionsMenu.isVisible())
+                    optionsMenu.setVisible(false);
+                else
+                    optionsMenu.setVisible(true);
             }
         });
         optionsButton.setPosition(420, 590);
