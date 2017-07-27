@@ -39,4 +39,4 @@ public class Player extends Image {
 
         addAction(moveAction);
     }
-}t
+}

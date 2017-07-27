@@ -20,6 +20,7 @@ public class GameplayScreen extends BasicScreen {
     private GameLabel scoreLabel;
     private MenuButton menuButton;
     private OptionsButton optionsButton;
+    private ShopMenu shopMenu;
 
     public GameplayScreen(MyGame myGame) {
         super(myGame);
@@ -35,9 +36,16 @@ public class GameplayScreen extends BasicScreen {
         initScoreLabel();
         initFlyingObjectController();
         initPassiveIncome();
-        initMenuButton();
+        initShopMenuIcon();
         initOptionsButton();
+        initShopMenu();
         // TODO add clouds and events under them
+    }
+
+    private void initShopMenu() {
+        shopMenu = new ShopMenu();
+        stage.addActor(shopMenu);
+        shopMenu.setVisible(false);
     }
 
     private void initOptionsButton() {
@@ -47,20 +55,25 @@ public class GameplayScreen extends BasicScreen {
 
             }
         });
-        optionsButton.setPosition(420,590);
+        optionsButton.setPosition(420, 590);
 
         stage.addActor(optionsButton);
     }
 
-    private void initMenuButton() {
+    private void initShopMenuIcon() {
         menuButton = new MenuButton(new IClickCallback() {
             @Override
             public void onClick() {
+                if (shopMenu.isVisible())
+                    shopMenu.setVisible(false);
+                else
+                    shopMenu.setVisible(true);
             }
         }, "Shop");
-        menuButton.setPosition(320,590);
+        menuButton.setPosition(320, 590);
         menuButton.setWidth(80);
         stage.addActor(menuButton);
+
     }
 
 
