@@ -20,15 +20,16 @@ public class ScrollMenu extends ScrollPane {
         initSkins();
         initStyle();
         initMenuContent();
+        addExitIcon();
+    }
+
+    private void addExitIcon() {
     }
 
     private void initStyle() {
         setStyle(new ScrollPaneStyle(
                 skin.getDrawable("textbox_02"),
-                skin.getDrawable("knob_02"),
-                skin.getDrawable("knob_02"),
-                skin.getDrawable("knob_02"),
-                skin.getDrawable("knob_02")));
+                null,null,null,null));
 
         setWidth((float) (MyGame.GAME_WIDTH/1.5));
         setHeight((float) (MyGame.GAME_HEIGHT/1.5));

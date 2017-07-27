@@ -3,8 +3,10 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.IClickCallback;
 import com.mygdx.game.MyGame;
@@ -24,6 +26,10 @@ public class GameplayScreen extends BasicScreen {
     private OptionsButton optionsButton;
     private ScrollMenu gameMenu;
     private ScrollMenu optionsMenu;
+    private Image iconSound;
+    private Image iconMusic;
+    private Image musicOn,musicOff;
+    private Image soundOn,soundOff;
 
     public GameplayScreen(MyGame myGame) {
         super(myGame);
@@ -46,12 +52,63 @@ public class GameplayScreen extends BasicScreen {
         // TODO add clouds and events under them
     }
 
+    private void handleIconsListeners() {
+        iconMusic.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (myGame.soundService.muteMusic) {
+                    myGame.soundService.setMuteMusic(false);
+                    iconMusic.setDrawable(optionsMenu.skin.getDrawable("icon_music"));
+                }
+                else {
+                    myGame.soundService.setMuteMusic(true);
+                    iconMusic.setDrawable(optionsMenu.skin.getDrawable("icon_pause"));
+                }
+                // TODO add INFO ON THE SCREEN ABOUT IT
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        iconSound.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(myGame.soundService.muteSound){
+                    myGame.soundService.setMuteSound(false);
+                    iconSound.setDrawable(optionsMenu.skin.getDrawable("icon_sound_on"));
+                }
+                else{
+                    myGame.soundService.setMuteSound(true);
+                    iconSound.setDrawable(optionsMenu.skin.getDrawable("icon_sound_off"));
+                }
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        backgroundImg.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(optionsMenu.isVisible())
+                    optionsMenu.setVisible(false);
+                if(gameMenu.isVisible())
+                    gameMenu.setVisible(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+    }
+
     private void InitOptions() {
         optionsMenu = new ScrollMenu();
         stage.addActor(optionsMenu);
-        optionsMenu.setHeight(200);
-        optionsMenu.content.add(new Image(optionsMenu.skin.getDrawable("icon_sound_on")));
-        optionsMenu.content.add(new Image(optionsMenu.skin.getDrawable("icon_music")));
+        optionsMenu.setVisible(false);
+        optionsMenu.setHeight(300);
+        optionsMenu.setPosition(optionsMenu.getX(),optionsMenu.getY()+100);
+        soundOn = iconSound = new Image(optionsMenu.skin.getDrawable("icon_sound_on"));
+        musicOn = iconMusic = new Image(optionsMenu.skin.getDrawable("icon_music"));
+        musicOff = new Image(optionsMenu.skin.getDrawable("icon_play"));
+        soundOff = new Image(optionsMenu.skin.getDrawable("icon_sound_off"));
+        optionsMenu.content.add(iconMusic, iconSound);
+
+        handleIconsListeners();
     }
 
     private void initShopMenu() {
@@ -63,8 +120,8 @@ public class GameplayScreen extends BasicScreen {
     }
 
     private void initShopContent() {
-        for (int i=0;i<30;i++) {
-            gameMenu.content.add(new Label(i+". TEST TEST TEST TEST ",
+        for (int i = 0; i < 30; i++) {
+            gameMenu.content.add(new Label(i + ". TEST TEST TEST TEST ",
                     new Label.LabelStyle(new BitmapFont(), Color.BROWN)));
             gameMenu.content.row();
         }
@@ -74,10 +131,11 @@ public class GameplayScreen extends BasicScreen {
         optionsButton = new OptionsButton(new IClickCallback() {
             @Override
             public void onClick() {
-                if(optionsMenu.isVisible())
+                if (optionsMenu.isVisible())
                     optionsMenu.setVisible(false);
                 else
                     optionsMenu.setVisible(true);
+                gameMenu.setVisible(false);
             }
         });
         optionsButton.setPosition(420, 590);
@@ -95,6 +153,7 @@ public class GameplayScreen extends BasicScreen {
                     gameMenu.setVisible(true);
                     stage.setScrollFocus(gameMenu);
                 }
+                optionsMenu.setVisible(false);
             }
         }, "Shop");
         menuButton.setPosition(320, 590);

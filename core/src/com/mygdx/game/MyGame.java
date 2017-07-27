@@ -1,8 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.screens.SplashScreen;
 import com.mygdx.game.services.ScoreService;
 import com.mygdx.game.services.SoundService;
@@ -33,7 +31,7 @@ public class MyGame extends Game {
 
     private void initAudio() {
         soundService = new SoundService();
-        soundService.playBgMusic();
+        soundService.playMusic();
     }
 
 }
