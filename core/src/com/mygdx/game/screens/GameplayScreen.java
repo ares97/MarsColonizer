@@ -2,7 +2,9 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.IClickCallback;
 import com.mygdx.game.MyGame;
@@ -20,7 +22,7 @@ public class GameplayScreen extends BasicScreen {
     private GameLabel scoreLabel;
     private MenuButton menuButton;
     private OptionsButton optionsButton;
-    private ShopMenu shopMenu;
+    private GameMenu gameMenu;
 
     public GameplayScreen(MyGame myGame) {
         super(myGame);
@@ -36,16 +38,26 @@ public class GameplayScreen extends BasicScreen {
         initScoreLabel();
         initFlyingObjectController();
         initPassiveIncome();
-        initShopMenuIcon();
         initOptionsButton();
+        initShopMenuIcon();
         initShopMenu();
         // TODO add clouds and events under them
     }
 
     private void initShopMenu() {
-        shopMenu = new ShopMenu();
-        stage.addActor(shopMenu);
-        shopMenu.setVisible(false);
+        gameMenu = new GameMenu();
+        stage.addActor(gameMenu);
+        gameMenu.setVisible(false);
+
+        initShopContent();
+    }
+
+    private void initShopContent() {
+        for (int i=0;i<30;i++) {
+            gameMenu.content.add(new Label(i+". TEST TEST TEST TEST ",
+                    new Label.LabelStyle(new BitmapFont(), Color.BROWN)));
+            gameMenu.content.row();
+        }
     }
 
     private void initOptionsButton() {
@@ -64,10 +76,12 @@ public class GameplayScreen extends BasicScreen {
         menuButton = new MenuButton(new IClickCallback() {
             @Override
             public void onClick() {
-                if (shopMenu.isVisible())
-                    shopMenu.setVisible(false);
-                else
-                    shopMenu.setVisible(true);
+                if (gameMenu.isVisible())
+                    gameMenu.setVisible(false);
+                else {
+                    gameMenu.setVisible(true);
+                    stage.setScrollFocus(gameMenu);
+                }
             }
         }, "Shop");
         menuButton.setPosition(320, 590);
@@ -75,7 +89,6 @@ public class GameplayScreen extends BasicScreen {
         stage.addActor(menuButton);
 
     }
-
 
     private void initWelcomeDialog() {
 
@@ -101,7 +114,6 @@ public class GameplayScreen extends BasicScreen {
             }
         }, 0, 1f, Integer.MAX_VALUE);
     }
-
 
     private void initScoreLabel() {
         scoreLabel = new GameLabel(40, 600);

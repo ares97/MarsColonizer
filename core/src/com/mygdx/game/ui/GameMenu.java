@@ -10,11 +10,11 @@ import com.mygdx.game.MyGame;
 /**
  * Created by ares on 27.07.17.
  */
-public class ShopMenu extends ScrollPane {
+public class GameMenu extends ScrollPane {
     public Table content;
     private Skin skin;
 
-    public ShopMenu() {
+    public GameMenu() {
         super(null);
         setDebug(true);
         initSkins();
