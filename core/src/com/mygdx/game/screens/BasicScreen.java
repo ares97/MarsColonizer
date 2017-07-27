@@ -66,6 +66,7 @@ public abstract class BasicScreen implements Screen {
     @Override
     public void pause() {
         myGame.scoreService.saveScoreDataToPrefs();
+        myGame.soundService.saveAudioToPrefs();
     }
 
     @Override

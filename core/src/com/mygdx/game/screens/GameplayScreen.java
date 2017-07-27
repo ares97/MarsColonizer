@@ -28,8 +28,6 @@ public class GameplayScreen extends BasicScreen {
     private ScrollMenu optionsMenu;
     private Image iconSound;
     private Image iconMusic;
-    private Image musicOn,musicOff;
-    private Image soundOn,soundOff;
 
     public GameplayScreen(MyGame myGame) {
         super(myGame);
@@ -59,8 +57,7 @@ public class GameplayScreen extends BasicScreen {
                 if (myGame.soundService.muteMusic) {
                     myGame.soundService.setMuteMusic(false);
                     iconMusic.setDrawable(optionsMenu.skin.getDrawable("icon_music"));
-                }
-                else {
+                } else {
                     myGame.soundService.setMuteMusic(true);
                     iconMusic.setDrawable(optionsMenu.skin.getDrawable("icon_pause"));
                 }
@@ -69,14 +66,13 @@ public class GameplayScreen extends BasicScreen {
             }
         });
 
-        iconSound.addListener(new ClickListener(){
+        iconSound.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(myGame.soundService.muteSound){
+                if (myGame.soundService.muteSound) {
                     myGame.soundService.setMuteSound(false);
                     iconSound.setDrawable(optionsMenu.skin.getDrawable("icon_sound_on"));
-                }
-                else{
+                } else {
                     myGame.soundService.setMuteSound(true);
                     iconSound.setDrawable(optionsMenu.skin.getDrawable("icon_sound_off"));
                 }
@@ -84,12 +80,12 @@ public class GameplayScreen extends BasicScreen {
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
-        backgroundImg.addListener(new ClickListener(){
+        backgroundImg.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(optionsMenu.isVisible())
+                if (optionsMenu.isVisible())
                     optionsMenu.setVisible(false);
-                if(gameMenu.isVisible())
+                if (gameMenu.isVisible())
                     gameMenu.setVisible(false);
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -101,14 +97,24 @@ public class GameplayScreen extends BasicScreen {
         stage.addActor(optionsMenu);
         optionsMenu.setVisible(false);
         optionsMenu.setHeight(300);
-        optionsMenu.setPosition(optionsMenu.getX(),optionsMenu.getY()+100);
-        soundOn = iconSound = new Image(optionsMenu.skin.getDrawable("icon_sound_on"));
-        musicOn = iconMusic = new Image(optionsMenu.skin.getDrawable("icon_music"));
-        musicOff = new Image(optionsMenu.skin.getDrawable("icon_play"));
-        soundOff = new Image(optionsMenu.skin.getDrawable("icon_sound_off"));
+        optionsMenu.setPosition(optionsMenu.getX(), optionsMenu.getY() + 100);
+        handleAudioIcon();
+
         optionsMenu.content.add(iconMusic, iconSound);
 
         handleIconsListeners();
+    }
+
+    private void handleAudioIcon() {
+        if(myGame.soundService.muteSound)
+            iconSound = new Image(optionsMenu.skin.getDrawable("icon_sound_off"));
+        else
+            iconSound = new Image(optionsMenu.skin.getDrawable("icon_sound_on"));
+
+        if(myGame.soundService.muteMusic)
+            iconMusic = new Image(optionsMenu.skin.getDrawable("icon_pause"));
+        else
+            iconMusic = new Image(optionsMenu.skin.getDrawable("icon_music"));
     }
 
     private void initShopMenu() {
