@@ -39,11 +39,13 @@ public class SoundService {
     }
 
     public void playMusic() {
-        if (!muteMusic) {
-            muteMusic = false;
             bgMusic.play();
             bgMusic.setLooping(true);
+        if (!muteMusic) {
             bgMusic.setVolume(bgMusicVolume);
+        }
+        else {
+            bgMusic.setVolume(0);
         }
     }
     public void playClick() {

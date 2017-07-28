@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -28,6 +29,7 @@ public class GameplayScreen extends BasicScreen {
     private ScrollMenu optionsMenu;
     private Image iconSound;
     private Image iconMusic;
+    private Button resetButton;
 
     public GameplayScreen(MyGame myGame) {
         super(myGame);
@@ -94,27 +96,66 @@ public class GameplayScreen extends BasicScreen {
 
     private void InitOptions() {
         optionsMenu = new ScrollMenu();
+        optionsMenu.content.defaults().center();
         stage.addActor(optionsMenu);
         optionsMenu.setVisible(false);
         optionsMenu.setHeight(300);
         optionsMenu.setPosition(optionsMenu.getX(), optionsMenu.getY() + 100);
         handleAudioIcon();
-
-        optionsMenu.content.add(iconMusic, iconSound);
+        handleResetButton();
 
         handleIconsListeners();
     }
 
+    private void handleResetButton() {
+        resetButton = new Button(
+                optionsMenu.skin.getDrawable("button_01"),
+                optionsMenu.skin.getDrawable("button_02"));
+
+        resetButton.add(new Label("Reset", new Label.LabelStyle(
+                new BitmapFont(), Color.FIREBRICK)));
+
+        optionsMenu.content.row().spaceTop(30);
+        optionsMenu.content.add(new Label("tap few times on reset button hurriedly\nin order to reset score",
+                new Label.LabelStyle(new BitmapFont(), Color.LIGHT_GRAY)));
+
+        optionsMenu.content.row();
+        optionsMenu.content.add(resetButton);
+        handleResetButtonListener();
+    }
+
+    private void handleResetButtonListener() {
+        resetButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (getTapCount() >= 4) {
+                    resetGameData();
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+        });
+    }
+
+    private void resetGameData() {
+        myGame.scoreService.resetScoreData();
+    }
+
     private void handleAudioIcon() {
-        if(myGame.soundService.muteSound)
+        if (myGame.soundService.muteSound)
             iconSound = new Image(optionsMenu.skin.getDrawable("icon_sound_off"));
         else
             iconSound = new Image(optionsMenu.skin.getDrawable("icon_sound_on"));
 
-        if(myGame.soundService.muteMusic)
+        if (myGame.soundService.muteMusic)
             iconMusic = new Image(optionsMenu.skin.getDrawable("icon_pause"));
         else
             iconMusic = new Image(optionsMenu.skin.getDrawable("icon_music"));
+
+        optionsMenu.content.row();
+        optionsMenu.content.add(iconMusic);
+        optionsMenu.content.row();
+        optionsMenu.content.add(iconSound);
     }
 
     private void initShopMenu() {
@@ -131,6 +172,8 @@ public class GameplayScreen extends BasicScreen {
                     new Label.LabelStyle(new BitmapFont(), Color.BROWN)));
             gameMenu.content.row();
         }
+        System.out.println(gameMenu.getWidth());
+        System.out.println(gameMenu.getHeight());
     }
 
     private void initOptionsButton() {

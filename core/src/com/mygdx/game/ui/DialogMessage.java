@@ -35,7 +35,7 @@ public class DialogMessage extends Dialog {
     private void init(final IClickCallback callback) {
         setWidth(MyGame.GAME_WIDTH);
         setHeight(180);
-        setPosition(330,100);
+        setPosition(330,275);
         addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
