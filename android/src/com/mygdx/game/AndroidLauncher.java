@@ -4,34 +4,40 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.*;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
-public class AndroidLauncher extends AndroidApplication {
+
+public class AndroidLauncher extends AndroidApplication implements RewardedVideoAdListener{
+	private static final String APP_ID = "ca-app-pub-5573564924159397~3593823754";
 	private static final String TAG = "AndroidLauncher";
+	private static final String AD_UNIT_ID_VIDEO = "ca-app-pub-5573564924159397/6343177965";
 	protected AdView adView;
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		keepScreenOn();
 
 		RelativeLayout relativeLayout = new RelativeLayout(this);
 		View gameView = initializeForView(new MyGame(), config);
 		relativeLayout.addView(gameView);
 
-		adView = new AdView(this);
-		adView.setAdListener(new AdListener(){
-			@Override
-			public void onAdLoaded() {
-				Log.i(TAG, "Ad loaded");
-			}
-		});
 
+
+		addTopAd(relativeLayout);
+		setContentView(relativeLayout);
+
+	}
+
+	private void addTopAd(RelativeLayout relativeLayout) {
+		adView = new AdView(this);
 		adView.setAdSize(AdSize.SMART_BANNER);
 		adView.setAdUnitId("ca-app-pub-5573564924159397/5727008983");
 
@@ -46,8 +52,45 @@ public class AndroidLauncher extends AndroidApplication {
 		);
 		relativeLayout.addView(adView,adParams);
 		adView.loadAd(builder.build());
+	}
 
-		setContentView(relativeLayout);
+	private void keepScreenOn() {
+		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+	}
+
+	@Override
+	public void onRewardedVideoAdLoaded() {
+
+	}
+
+	@Override
+	public void onRewardedVideoAdOpened() {
+
+	}
+
+	@Override
+	public void onRewardedVideoStarted() {
+
+	}
+
+	@Override
+	public void onRewardedVideoAdClosed() {
+
+	}
+
+	@Override
+	public void onRewarded(RewardItem rewardItem) {
+
+	}
+
+	@Override
+	public void onRewardedVideoAdLeftApplication() {
+
+	}
+
+	@Override
+	public void onRewardedVideoAdFailedToLoad(int i) {
 
 	}
 }

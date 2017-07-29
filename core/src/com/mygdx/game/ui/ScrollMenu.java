@@ -36,7 +36,7 @@ public class ScrollMenu extends ScrollPane {
         setHeight((float) (MyGame.GAME_HEIGHT/1.5));
         setOrigin(MyGame.GAME_WIDTH/2,MyGame.GAME_HEIGHT/2);
         setPosition((MyGame.GAME_WIDTH-getWidth())/2,
-                (MyGame.GAME_HEIGHT-getHeight())/2-20);
+                (MyGame.GAME_HEIGHT-getHeight())/2-70);
     }
 
     private void initSkins() {

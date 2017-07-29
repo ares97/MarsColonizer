@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
@@ -196,7 +197,9 @@ public class GameplayScreen extends BasicScreen {
         gameMenu.setVisible(false);
         gameMenu.setStyle(new ScrollPane.ScrollPaneStyle(
                 gameMenu.skinGray.getDrawable("button_03"),
-                null, null, null, gameMenu.skinGray.getDrawable("slider_back_ver")
+                null, null,
+                gameMenu.skinGray.getDrawable("knob_03"),
+                gameMenu.skinGray.getDrawable("slider_back_ver")
         ));
 
         initShopContent();
@@ -207,12 +210,20 @@ public class GameplayScreen extends BasicScreen {
         menuLabelStyle = new Label.LabelStyle(new BitmapFont(), Color.GOLD);
         shopContainer = new Table();
 
+        addShopTitle();
         initShopDataFromPrefs();
         initAddingItems();
 
-
         gameMenu.content.add(shopContainer);
 
+    }
+
+    private void addShopTitle() {
+        Label title = new Label("Tap few time on item to buy",
+                new Label.LabelStyle(new BitmapFont(),Color.GRAY));
+
+        shopContainer.add(title).expand().fill();
+        shopContainer.row();
     }
 
 
@@ -234,18 +245,19 @@ public class GameplayScreen extends BasicScreen {
         final float bonus = 0.05f;
 
         addItemToShop("img/bed.png",
-                "Increase offline basalt income by "+bonus+ "%" +
-                        "\ncost: "+cost+" diamond",
+                "Increase offline basalt income by " + bonus + "%" +
+                        "\ncost: " + cost + " diamond",
                 new IShopCallback() {
                     @Override
                     public boolean isBuying() {
                         if (myGame.scoreService.getDiamonds() >= cost) {
                             myGame.scoreService.addToDiamonds(-cost);
                             myGame.scoreService.addToOfflinePassiveMultiply(bonus);
+                            return true;
                         }
                         return false;
                     }
-                },ShopItems.OFFLINE_INCOME);
+                }, ShopItems.OFFLINE_INCOME);
     }
 
     private void addBigShaft() {
@@ -265,7 +277,7 @@ public class GameplayScreen extends BasicScreen {
                         }
                         return false;
                     }
-                },ShopItems.BIG_SHAFT);
+                }, ShopItems.BIG_SHAFT);
     }
 
     private void addSmallShaft() {
@@ -285,7 +297,7 @@ public class GameplayScreen extends BasicScreen {
                         }
                         return false;
                     }
-                },ShopItems.SILVER_PICKAXE);
+                }, ShopItems.SILVER_PICKAXE);
     }
 
     private void addWorker() {
@@ -305,7 +317,7 @@ public class GameplayScreen extends BasicScreen {
                         }
                         return false;
                     }
-                },ShopItems.WORKER);
+                }, ShopItems.WORKER);
     }
 
     private void addDiamondPickaxe() {
@@ -325,7 +337,7 @@ public class GameplayScreen extends BasicScreen {
                         }
                         return false;
                     }
-                },ShopItems.DIAMOND_PICKAXE);
+                }, ShopItems.DIAMOND_PICKAXE);
     }
 
     private void addSilverPickaxe() {
@@ -345,7 +357,7 @@ public class GameplayScreen extends BasicScreen {
                         }
                         return false;
                     }
-                },ShopItems.SILVER_PICKAXE);
+                }, ShopItems.SILVER_PICKAXE);
 
     }
 
@@ -367,7 +379,7 @@ public class GameplayScreen extends BasicScreen {
                         }
                         return false;
                     }
-                },ShopItems.BASALT_PICKAXE);
+                }, ShopItems.BASALT_PICKAXE);
 
     }
 
@@ -401,6 +413,7 @@ public class GameplayScreen extends BasicScreen {
                         if (myGame.scoreService.getBasalt() >= 1000) {
                             myGame.scoreService.addToBasalt(-1000);
                             myGame.scoreService.addToDiamonds(1);
+                            return true;
                         }
                         return false;
                     }
@@ -417,19 +430,39 @@ public class GameplayScreen extends BasicScreen {
         table.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (callback.isBuying()) {
-                    table.addAction(Actions.sizeBy(25, 25));
-                    table.setVisible(false);
+                if (getTapCount() >= 2) {
+                    if (callback.isBuying()) {
 
-                    itemToDisappear.put(itemName.toString(),true);
+                        table.addAction(new SequenceAction(
+                                Actions.sizeBy(-30, -30, 0.5f, Interpolation.fade),
+                                Actions.sizeBy(30, 30, 0.5f),
+                                Actions.rotateBy(360, 1f)));
+
+                        if (!(itemName.equals(ShopItems.DIAMOND) || itemName.equals(ShopItems.OFFLINE_INCOME))) {
+                            Timer.schedule(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    table.setVisible(false);
+                                    itemToDisappear.put(itemName.toString(), true);
+                                }
+                            }, 1);
+                        }
+
+                    }
 
                 }
+                table.addAction(new SequenceAction(
+                        Actions.sizeBy(2, 2, 0.5f),
+                        Actions.sizeBy(-2, -2, 0.5f),
+                        Actions.moveBy(-1, 1, 0.5f),
+                        Actions.moveBy(1, -1, 0.5f)
+                ));
 
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
-        if(itemToDisappear.get(itemName.toString())) {
+        if (itemToDisappear.get(itemName.toString())) {
             table.setVisible(false);
         }
 
@@ -462,7 +495,7 @@ public class GameplayScreen extends BasicScreen {
                 gameMenu.setVisible(false);
             }
         });
-        optionsButton.setPosition(420, 590);
+        optionsButton.setPosition(420, 550);
 
         stage.addActor(optionsButton);
     }
@@ -480,7 +513,7 @@ public class GameplayScreen extends BasicScreen {
                 optionsMenu.setVisible(false);
             }
         }, "Shop");
-        menuButton.setPosition(320, 590);
+        menuButton.setPosition(320, 550);
         menuButton.setWidth(80);
         stage.addActor(menuButton);
 
@@ -512,7 +545,7 @@ public class GameplayScreen extends BasicScreen {
     }
 
     private void initScoreLabel() {
-        scoreLabel = new GameLabel(40, 600);
+        scoreLabel = new GameLabel(40, 550);
         stage.addActor(scoreLabel);
     }
 
@@ -560,9 +593,9 @@ public class GameplayScreen extends BasicScreen {
         scoreLabel.setText("Basalt(B):  " + myGame.scoreService.getBasalt() +
                 "\n" + myGame.scoreService.getPassiveBasalt() + " basalt/sec" +
                 "\nDiamonds: " + myGame.scoreService.getDiamonds() +
-                "\nB per click: " + myGame.scoreService.getBasaltPerClick()+
+                "\nB per click: " + myGame.scoreService.getBasaltPerClick() +
                 "\nOffline B income: " +
-                String.format("%.2f",myGame.scoreService.getOfflineBasaltIncome())
+                String.format("%.2f", myGame.scoreService.getOfflineBasaltIncome())
                 + "/sec");
     }
 
