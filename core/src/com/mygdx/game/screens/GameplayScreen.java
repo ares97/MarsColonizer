@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.IClickCallback;
@@ -55,13 +56,13 @@ public class GameplayScreen extends BasicScreen {
         initBackground();
         initPlayer();
         handleClickArea();
-        initWelcomeDialog();
-        initScoreLabel();
-        initFlyingObjectController();
-        initPassiveIncome();
         initOptionsButton();
         initShopMenuIcon();
         initShopMenu();
+        initWelcomeWindow();
+        initScoreLabel();
+        initFlyingObjectController();
+        initPassiveIncome();
         InitOptions();
         // TODO add clouds and events under them
     }
@@ -519,20 +520,85 @@ public class GameplayScreen extends BasicScreen {
 
     }
 
-    private void initWelcomeDialog() {
 
-        if (myGame.scoreService.getOfflineIncome() > 0) {
-            DialogMessage dialogMessage = new DialogMessage(new IClickCallback() {
-                @Override
-                public void onClick() {
-                    myGame.scoreService.addToBasalt(myGame.scoreService.getOfflineIncome());
-                }
-            });
-            dialogMessage.setText("OFFLINE BA$ALT INCOME: " + myGame.scoreService.getOfflineIncome() + "!\n" +
-                    "Watch ad to TRIPLE your offline income.", Color.GOLD);
+    public void initWelcomeWindow(){
+        final ScrollMenu welcomeMenu = new ScrollMenu();
+        stage.addActor(welcomeMenu);
 
-            stage.addActor(dialogMessage);
-        }
+        Drawable buttonDraw = gameMenu.skinBlue.getDrawable("button_01");
+        buttonDraw.setMinWidth(125);
+        buttonDraw.setMinHeight(35);
+
+        Button watchAdButton = new Button(
+                new Button.ButtonStyle(buttonDraw,
+                        gameMenu.skinBlue.getDrawable("button_02"),
+                        buttonDraw));
+        watchAdButton.addActor(new Label(" WATCH THE AD ",
+                new Label.LabelStyle(new BitmapFont(),Color.GOLD)));
+
+        Button noThanksButton = new Button(
+                new Button.ButtonStyle(buttonDraw,
+                        gameMenu.skinBlue.getDrawable("button_02"),
+                        buttonDraw));
+        noThanksButton.addActor(new Label("  NO, THANKS",
+                new Label.LabelStyle(new BitmapFont(),Color.GOLD)));
+
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(),Color.DARK_GRAY);
+        Label label = new Label("\n\nOFFLINE BA$ALT INCOME: " + myGame.scoreService.getOfflineIncome() + "!\n" +
+                "Watch ad to increase your offline income by 300%.",
+                labelStyle);
+
+        if(myGame.scoreService.getBasalt() == 0)
+            label.setText("\n\nLooks like you need some help\nWatch ad and get 200 basalts\n");
+
+        addWatchButtonHandler(watchAdButton);
+
+        addExitWelcomeMenuHandler(welcomeMenu, noThanksButton);
+
+        Table buttonTable = new Table();
+        buttonTable.add(watchAdButton).pad(10);
+        buttonTable.add(noThanksButton).pad(10);
+
+        adjustWlcomeMenu(welcomeMenu);
+
+        addActorsToWelcomeMenu(welcomeMenu, label, buttonTable);
+
+    }
+
+    private void addActorsToWelcomeMenu(ScrollMenu welcomeMenu, Label label, Table buttonTable) {
+        welcomeMenu.content.row();
+        welcomeMenu.content.add(label).expand();
+        welcomeMenu.content.row();
+        welcomeMenu.content.add(buttonTable).expand().fill();
+        stage.addActor(welcomeMenu);
+    }
+
+    private void adjustWlcomeMenu(ScrollMenu welcomeMenu) {
+        welcomeMenu.setHeight(200);
+        welcomeMenu.setWidth(MyGame.GAME_WIDTH-50);
+        welcomeMenu.setY(200);
+        welcomeMenu.setX(25);
+    }
+
+    private void addExitWelcomeMenuHandler(final ScrollMenu welcomeMenu, Button noThanksButton) {
+        noThanksButton.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                welcomeMenu.setVisible(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+    }
+
+    private void addWatchButtonHandler(Button watchAdButton) {
+        watchAdButton.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                myGame.showVideoAd();
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
     }
 
     private void initPassiveIncome() {

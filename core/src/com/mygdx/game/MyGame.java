@@ -16,6 +16,13 @@ public class MyGame extends Game {
     public SoundService soundService;
     public ScoreService scoreService;
 
+    public AdHandler handler;
+    boolean toggle;
+
+    public MyGame(AdHandler handler){
+        this.handler = handler;
+    }
+
 
 
     @Override
@@ -34,4 +41,7 @@ public class MyGame extends Game {
         soundService.playMusic();
     }
 
+    public void showVideoAd(){
+        handler.showAds(true);
+    }
 }
