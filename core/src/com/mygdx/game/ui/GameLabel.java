@@ -14,7 +14,6 @@ public class GameLabel extends Label {
     }
 
 
-
     private static LabelStyle getLabelStyle() {
         LabelStyle style = new LabelStyle();
         style.font = new BitmapFont();

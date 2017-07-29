@@ -2,11 +2,8 @@ package com.mygdx.game.services;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.mygdx.game.IClickCallback;
 import com.mygdx.game.MyGame;
-import com.mygdx.game.ui.DialogMessage;
 
 /**
  * Created by ares on 25.07.17.
@@ -28,11 +25,18 @@ public class ScoreService {
     private long diamonds;
     private float offlinePassiveIncomeMultiple;
     private long offlineIncome;
+    private Preferences prefs;
+
+    public ScoreService() {
+        initPrefs();
+        loadScoreDataFromPrefs();
+        workOutPassiveIncomeWhileOffline();
+    }
 
     private void workOutPassiveIncomeWhileOffline() {
         long lastActivity = prefs.getLong(LAST_ACTIVITY);
         offlineIncome = TimeUtils.timeSinceMillis(lastActivity) / 1000; // mili -> sec
-        System.out.println(TimeUtils.timeSinceMillis(lastActivity)/1000);
+        System.out.println(TimeUtils.timeSinceMillis(lastActivity) / 1000);
         offlineIncome *= getOfflineBasaltIncome();
     }
 
@@ -59,14 +63,6 @@ public class ScoreService {
 
     public void setBasaltPerClick(int basaltPerClick) {
         this.basaltPerClick = basaltPerClick;
-    }
-
-    private Preferences prefs;
-
-    public ScoreService() {
-        initPrefs();
-        loadScoreDataFromPrefs();
-        workOutPassiveIncomeWhileOffline();
     }
 
     public void addToBasaltPerClick(int x) {

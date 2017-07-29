@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 public class OptionsMenu extends Actor {
     private ScrollMenu menu;
 
-    public OptionsMenu(){
+    public OptionsMenu() {
 
         menu = new ScrollMenu();
         menu.setHeight(200);

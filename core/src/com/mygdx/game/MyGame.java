@@ -12,17 +12,14 @@ public class MyGame extends Game {
     public final static int GAME_HEIGHT = 700;
 
     public final static String TITLE = "Mars Colonizer";
-
+    public static boolean adShown = false;
     public SoundService soundService;
     public ScoreService scoreService;
-
     public AdHandler handler;
-    boolean toggle;
 
-    public MyGame(AdHandler handler){
+    public MyGame(AdHandler handler) {
         this.handler = handler;
     }
-
 
 
     @Override
@@ -41,7 +38,7 @@ public class MyGame extends Game {
         soundService.playMusic();
     }
 
-    public void showVideoAd(){
+    public void showVideoAd() {
         handler.showAds(true);
     }
 }

@@ -12,5 +12,6 @@ public enum ShopItems {
     SMALL_SHAFT,
     BIG_SHAFT,
     DIAMOND,
-    OFFLINE_INCOME
+    OFFLINE_INCOME,
+    EXTRA_BONUS
 }

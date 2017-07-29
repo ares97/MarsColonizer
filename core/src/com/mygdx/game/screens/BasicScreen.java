@@ -20,12 +20,12 @@ public abstract class BasicScreen implements Screen {
     protected OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
 
-    public BasicScreen(MyGame myGame){
+    public BasicScreen(MyGame myGame) {
         this.myGame = myGame;
 
         createCamera();
 
-        stage = new Stage(new StretchViewport(MyGame.GAME_WIDTH, MyGame.GAME_HEIGHT,camera));
+        stage = new Stage(new StretchViewport(MyGame.GAME_WIDTH, MyGame.GAME_HEIGHT, camera));
         Gdx.input.setInputProcessor(stage);
         spriteBatch = new SpriteBatch();
         init();
@@ -52,10 +52,9 @@ public abstract class BasicScreen implements Screen {
     }
 
     protected void clearScreen() {
-        Gdx.gl.glClearColor(0,0,0,0);
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
-
 
 
     @Override

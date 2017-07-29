@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.IClickCallback;
 import com.mygdx.game.MyGame;
@@ -15,38 +17,16 @@ import com.mygdx.game.MyGame;
  */
 public class DialogMessage extends Dialog {
     public DialogMessage(IClickCallback callback) {
-        super("",getDialogButtonStyle());
+        super("", getDialogButtonStyle());
 
         init(callback);
     }
 
     public DialogMessage() {
-        super("",getDialogButtonStyle());
+        super("", getDialogButtonStyle());
 
         init();
     }
-
-    private void init() {
-        setWidth(MyGame.GAME_WIDTH);
-        setHeight(180);
-        setPosition(330,100);
-    }
-
-    private void init(final IClickCallback callback) {
-        setWidth(MyGame.GAME_WIDTH);
-        setHeight(180);
-        setPosition(330,275);
-        addListener(new ClickListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                callback.onClick();
-                remove();
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
-    }
-
-
 
     private static WindowStyle getDialogButtonStyle() {
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("img/ui-blue.atlas"));
@@ -57,7 +37,27 @@ public class DialogMessage extends Dialog {
         return style;
     }
 
-    public void setText(String str, Color color){
-        text(new Label(str,new Label.LabelStyle(new BitmapFont(), color)));
+    private void init() {
+        setWidth(MyGame.GAME_WIDTH);
+        setHeight(180);
+        setPosition(330, 100);
+    }
+
+    private void init(final IClickCallback callback) {
+        setWidth(MyGame.GAME_WIDTH);
+        setHeight(180);
+        setPosition(330, 275);
+        addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                callback.onClick();
+                remove();
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+    }
+
+    public void setText(String str, Color color) {
+        text(new Label(str, new Label.LabelStyle(new BitmapFont(), color)));
     }
 }

@@ -16,19 +16,16 @@ import com.mygdx.game.ui.DialogMessage;
  * Created by ares on 25.07.17.
  */
 public class FlyingObject extends Image {
-    private MyGame myGame;
-    private FlyingObjectType objectType;
-
     private static final String ASTRONAUT = "img/astronaut.png";
     private static final String METEOR = "img/meteor.png";
     private static final String UFO = "img/ufo.png";
-
     private final static int WIDTH = 75;
     private final static int HEIGHT = 75;
-
     private final static int STARTING_X_1 = 0;
     private final static int STARTING_X_2 = MyGame.GAME_WIDTH;
     private final static int STARTING_Y = -100;
+    private MyGame myGame;
+    private FlyingObjectType objectType;
     private int startingX;
 
     public FlyingObject(MyGame game, FlyingObjectType type) {
@@ -52,31 +49,6 @@ public class FlyingObject extends Image {
         });
     }
 
-    private void reactOnClick() {
-        final DialogMessage dialogMssg = new DialogMessage(new IClickCallback() {
-            @Override
-            public void onClick() {
-            }
-        });
-
-        if(FlyingObjectType.ASTRONAUT.equals(objectType)){
-            myGame.scoreService.addToPassiveBasalt(1);
-            dialogMssg.setText("That's looks like You gonna have slave!\n(+1 basalt/sec)", Color.CORAL);
-        }
-        else if(FlyingObjectType.UFO.equals(objectType)){
-            myGame.scoreService.addToDiamonds(1);
-            dialogMssg.setText("After breaking space ship apart you've found diamond in it!\n(+1 diamond)", Color.GOLD);
-        }
-        else if(FlyingObjectType.METEOR.equals(objectType)){
-            myGame.scoreService.addToBasalt(150);
-            dialogMssg.setText("Just more basalt...\n(+150 basalt)", Color.GRAY);
-        }
-
-        getStage().addActor(dialogMssg);
-        this.remove();
-    }
-
-
     private static String getFlyingObjectType(FlyingObjectType type) {
         if (FlyingObjectType.UFO.equals(type)) {
             return UFO;
@@ -91,6 +63,28 @@ public class FlyingObject extends Image {
         return "";
     }
 
+    private void reactOnClick() {
+        final DialogMessage dialogMssg = new DialogMessage(new IClickCallback() {
+            @Override
+            public void onClick() {
+            }
+        });
+
+        if (FlyingObjectType.ASTRONAUT.equals(objectType)) {
+            myGame.scoreService.addToPassiveBasalt(1);
+            dialogMssg.setText("That's looks like You gonna have slave!\n(+1 basalt/sec)", Color.CORAL);
+        } else if (FlyingObjectType.UFO.equals(objectType)) {
+            myGame.scoreService.addToDiamonds(1);
+            dialogMssg.setText("After breaking space ship apart you've found diamond in it!\n(+1 diamond)", Color.GOLD);
+        } else if (FlyingObjectType.METEOR.equals(objectType)) {
+            myGame.scoreService.addToBasalt(75);
+            dialogMssg.setText("Just more basalt...\n(+75 basalt)", Color.GRAY);
+        }
+
+        getStage().addActor(dialogMssg);
+        this.remove();
+    }
+
     public void performFlyingAction() {
         int xSign = 0;
         if (startingX == STARTING_X_1) {
@@ -99,8 +93,8 @@ public class FlyingObject extends Image {
             xSign = -1;
         }
 
-        int time1 = MathUtils.random(1, 3);
-        int time2 = MathUtils.random(1, 3);
+        float time1 = MathUtils.random(0.6f, 2.5f);
+        float time2 = MathUtils.random(0.6f, 2.5f);
 
         int randomYEffect = MathUtils.random(-100, 500);
 

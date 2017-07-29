@@ -16,20 +16,10 @@ import com.mygdx.game.IClickCallback;
  */
 public class MenuButton extends Button {
 
-    public MenuButton(IClickCallback callback, String str){
+    public MenuButton(IClickCallback callback, String str) {
         super(getButtonStyle());
         init(callback);
-        add(new Label(str,new Label.LabelStyle(new BitmapFont(), Color.GOLD)));
-    }
-
-    private void init(final IClickCallback callback) {
-        addListener(new ClickListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                callback.onClick();
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
+        add(new Label(str, new Label.LabelStyle(new BitmapFont(), Color.GOLD)));
     }
 
     private static ButtonStyle getButtonStyle() {
@@ -39,5 +29,15 @@ public class MenuButton extends Button {
         buttonStyle.down = skin.getDrawable("button_05");
         buttonStyle.up = skin.getDrawable("button_05");
         return buttonStyle;
+    }
+
+    private void init(final IClickCallback callback) {
+        addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                callback.onClick();
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
     }
 }

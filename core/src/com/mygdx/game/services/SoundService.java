@@ -13,12 +13,11 @@ import com.mygdx.game.MyGame;
 public class SoundService {
     public final static String MUTE_MUSIC = "com.mygdx.game.prefs.muteMusic";
     public final static String MUTE_SOUND = "com.mygdx.game.prefs.muteSound";
-
+    public boolean muteSound;
+    public boolean muteMusic;
     private Music bgMusic;
     private Sound clickSound;
     private float bgMusicVolume;
-    public boolean muteSound;
-    public boolean muteMusic;
     private Preferences prefs;
 
     public SoundService() {

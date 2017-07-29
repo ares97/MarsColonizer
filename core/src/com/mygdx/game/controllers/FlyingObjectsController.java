@@ -29,16 +29,16 @@ public class FlyingObjectsController {
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                            addRandomFlyingObjectToStage();
-                            randomizeSpawnTime();
+                        addRandomFlyingObjectToStage();
+                        randomizeSpawnTime();
                     }
                 }, spawnTime);
             }
-        }, 0, 5);
+        }, 10, 5);
     }
 
     private void randomizeSpawnTime() {
-        spawnTime = MathUtils.random(1, 5);
+        spawnTime = MathUtils.random(5, 25);
     }
 
     private void addRandomFlyingObjectToStage() {
@@ -49,7 +49,7 @@ public class FlyingObjectsController {
 
     private FlyingObjectType getRandomFlyingObjectType() {
         FlyingObjectType[] objectTypes = FlyingObjectType.values();
-        int randomType = MathUtils.random(0, objectTypes.length-1);
+        int randomType = MathUtils.random(0, objectTypes.length - 1);
 
         return objectTypes[randomType];
     }

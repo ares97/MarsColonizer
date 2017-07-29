@@ -15,8 +15,8 @@ public class Player extends Image {
     public final static int PLAYER_WIDTH = 300;
     public final static int PLAYER_HEIGHT = 275;
 
-    public final static int STARTING_X = MyGame.GAME_WIDTH /2 - PLAYER_WIDTH/2;
-    public final static int STARTING_Y = MyGame.GAME_HEIGHT /2 - PLAYER_HEIGHT/3 - 100;
+    public final static int STARTING_X = MyGame.GAME_WIDTH / 2 - PLAYER_WIDTH / 2;
+    public final static int STARTING_Y = MyGame.GAME_HEIGHT / 2 - PLAYER_HEIGHT / 3 - 100;
 
 
     public Player() {
@@ -27,14 +27,14 @@ public class Player extends Image {
         setPosition(STARTING_X, STARTING_Y);
     }
 
-    public void performClickEffect(){
-        int xMoveAmount = MathUtils.random(-20,20);
-        int yMoveAmount = MathUtils.random(-7,7);
+    public void performClickEffect() {
+        int xMoveAmount = MathUtils.random(-20, 20);
+        int yMoveAmount = MathUtils.random(-7, 7);
         float moveDuration = 1.0f;
 
         SequenceAction moveAction = new SequenceAction(
-                Actions.moveBy(xMoveAmount,yMoveAmount,moveDuration, Interpolation.bounceOut),
-                Actions.moveBy(-xMoveAmount,-yMoveAmount,moveDuration, Interpolation.bounce)
+                Actions.moveBy(xMoveAmount, yMoveAmount, moveDuration, Interpolation.bounceOut),
+                Actions.moveBy(-xMoveAmount, -yMoveAmount, moveDuration, Interpolation.bounce)
         );
 
         addAction(moveAction);

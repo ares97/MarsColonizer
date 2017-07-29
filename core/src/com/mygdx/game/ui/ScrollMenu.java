@@ -28,15 +28,15 @@ public class ScrollMenu extends ScrollPane {
     private void initStyle() {
         style = new ScrollPaneStyle(
                 skinBlue.getDrawable("window_03"),
-                null,null,null,null);
+                null, null, null, null);
 
         setStyle(style);
 
-        setWidth((float) (MyGame.GAME_WIDTH/1.5));
-        setHeight((float) (MyGame.GAME_HEIGHT/1.5));
-        setOrigin(MyGame.GAME_WIDTH/2,MyGame.GAME_HEIGHT/2);
-        setPosition((MyGame.GAME_WIDTH-getWidth())/2,
-                (MyGame.GAME_HEIGHT-getHeight())/2-70);
+        setWidth((float) (MyGame.GAME_WIDTH / 1.5));
+        setHeight((float) (MyGame.GAME_HEIGHT / 1.5));
+        setOrigin(MyGame.GAME_WIDTH / 2, MyGame.GAME_HEIGHT / 2);
+        setPosition((MyGame.GAME_WIDTH - getWidth()) / 2,
+                (MyGame.GAME_HEIGHT - getHeight()) / 2 - 70);
     }
 
     private void initSkins() {

@@ -28,6 +28,8 @@ import java.util.HashMap;
  * Created by ares on 25.07.17.
  */
 public class GameplayScreen extends BasicScreen {
+    ScrollMenu welcomeMenu;
+    Table shopContainer;
     private Image backgroundImg;
     private Player player;
     private FlyingObjectsController flyingObjectController;
@@ -43,8 +45,12 @@ public class GameplayScreen extends BasicScreen {
     private SequenceAction onBuyActions;
     private java.util.Map<String, Boolean> itemToDisappear;
     private Preferences prefs;
+    private boolean isWelcomeVideoAd;
+    private long watchedAdBasaltBonus;
     private Array<Table> shopItems;
-    Table shopContainer;
+    private Label extraBonusLabel;
+    private long basaltFirstRewardForVideoAd = 400;
+    private int basaltMultiplyRewardForVideoAd; // 1 = 100%
 
     public GameplayScreen(MyGame myGame) {
         super(myGame);
@@ -220,8 +226,8 @@ public class GameplayScreen extends BasicScreen {
     }
 
     private void addShopTitle() {
-        Label title = new Label("Tap few time on item to buy",
-                new Label.LabelStyle(new BitmapFont(),Color.GRAY));
+        Label title = new Label("Tap few times hurriedly on item to buy",
+                new Label.LabelStyle(new BitmapFont(), Color.RED));
 
         shopContainer.add(title).expand().fill();
         shopContainer.row();
@@ -230,6 +236,7 @@ public class GameplayScreen extends BasicScreen {
 
     private void initAddingItems() {
         shopItems = new Array<Table>();
+        addExtraBonus();
         addBasaltDiamondExchange();
         addOfflineIncome();
         addWoodenPickaxe();
@@ -241,8 +248,22 @@ public class GameplayScreen extends BasicScreen {
         addBigShaft();
     }
 
+    private void addExtraBonus() {
+        watchedAdBasaltBonus = (long) (myGame.scoreService.getBasalt() * 0.35 + 5000);
+
+        addItemToShop("img/helmet.png",
+                "Watch ad and get \n+" + watchedAdBasaltBonus + " basalts!",
+                new IShopCallback() {
+                    @Override
+                    public boolean isBuying() {
+                        myGame.showVideoAd();
+                        return true;
+                    }
+                }, ShopItems.EXTRA_BONUS);
+    }
+
     private void addOfflineIncome() {
-        final int cost = 1;
+        final int cost = (int) (1 + myGame.scoreService.getOfflineBasaltIncome() * 5);
         final float bonus = 0.05f;
 
         addItemToShop("img/bed.png",
@@ -425,8 +446,10 @@ public class GameplayScreen extends BasicScreen {
         final Table table = new Table();
         table.add(new Label("", menuLabelStyle)).height(70).fill();
         table.add(new Image(new Texture(imgPath))).setActorHeight(50);
+        final Label label = new Label("", menuLabelStyle);
         table.add(new Label("", menuLabelStyle)).width(10f).fillY();
-        table.add(new Label(description, menuLabelStyle)).expand().fill();
+        table.add(label).expand().fill();
+        label.setText(description);
 
         table.addListener(new ClickListener() {
             @Override
@@ -439,7 +462,8 @@ public class GameplayScreen extends BasicScreen {
                                 Actions.sizeBy(30, 30, 0.5f),
                                 Actions.rotateBy(360, 1f)));
 
-                        if (!(itemName.equals(ShopItems.DIAMOND) || itemName.equals(ShopItems.OFFLINE_INCOME))) {
+                        if (!(itemName.equals(ShopItems.DIAMOND) ||
+                                itemName.equals(ShopItems.OFFLINE_INCOME) || itemName.equals(ShopItems.EXTRA_BONUS))) {
                             Timer.schedule(new Timer.Task() {
                                 @Override
                                 public void run() {
@@ -458,6 +482,9 @@ public class GameplayScreen extends BasicScreen {
                         Actions.moveBy(-1, 1, 0.5f),
                         Actions.moveBy(1, -1, 0.5f)
                 ));
+
+                if (itemName.equals(ShopItems.EXTRA_BONUS))
+                    extraBonusLabel = label;
 
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -521,8 +548,8 @@ public class GameplayScreen extends BasicScreen {
     }
 
 
-    public void initWelcomeWindow(){
-        final ScrollMenu welcomeMenu = new ScrollMenu();
+    public void initWelcomeWindow() {
+        welcomeMenu = new ScrollMenu();
         stage.addActor(welcomeMenu);
 
         Drawable buttonDraw = gameMenu.skinBlue.getDrawable("button_01");
@@ -533,24 +560,31 @@ public class GameplayScreen extends BasicScreen {
                 new Button.ButtonStyle(buttonDraw,
                         gameMenu.skinBlue.getDrawable("button_02"),
                         buttonDraw));
-        watchAdButton.addActor(new Label(" WATCH THE AD ",
-                new Label.LabelStyle(new BitmapFont(),Color.GOLD)));
+        watchAdButton.addActor(new Label(" WATCH AD ",
+                new Label.LabelStyle(new BitmapFont(), Color.GOLD)));
 
         Button noThanksButton = new Button(
                 new Button.ButtonStyle(buttonDraw,
                         gameMenu.skinBlue.getDrawable("button_02"),
                         buttonDraw));
         noThanksButton.addActor(new Label("  NO, THANKS",
-                new Label.LabelStyle(new BitmapFont(),Color.GOLD)));
+                new Label.LabelStyle(new BitmapFont(), Color.GOLD)));
 
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(),Color.DARK_GRAY);
-        Label label = new Label("\n\nOFFLINE BA$ALT INCOME: " + myGame.scoreService.getOfflineIncome() + "!\n" +
-                "Watch ad to increase your offline income by 300%.",
+        Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(), Color.DARK_GRAY);
+        Label label = new Label("\n\nOFFLINE BA$ALT INCOME: " + ((long) (myGame.scoreService.getOfflineBasaltIncome())) + "!\n" +
+                "Watch ad to increase your offline income by 400%.",
                 labelStyle);
 
-        if(myGame.scoreService.getBasalt() == 0)
-            label.setText("\n\nLooks like you need some help\nWatch ad and get 200 basalts\n");
+        basaltMultiplyRewardForVideoAd = 4; // 4 == 400%;
+
+        if (((long) (myGame.scoreService.getOfflineBasaltIncome()) <= 1) && myGame.scoreService.getBasalt() > 0) {
+            basaltFirstRewardForVideoAd = myGame.scoreService.getBasalt() / 5 + 15;
+            label.setText("\n\nWatch ad and get " + basaltFirstRewardForVideoAd + " basalts");
+        }
+
+        if (myGame.scoreService.getBasalt() == 0)
+            label.setText("\n\nLooks like you need some help\nWatch ad and get " + basaltFirstRewardForVideoAd + " basalts\n");
 
         addWatchButtonHandler(watchAdButton);
 
@@ -560,9 +594,17 @@ public class GameplayScreen extends BasicScreen {
         buttonTable.add(watchAdButton).pad(10);
         buttonTable.add(noThanksButton).pad(10);
 
-        adjustWlcomeMenu(welcomeMenu);
+        adjustWelcomeMenu(welcomeMenu);
 
         addActorsToWelcomeMenu(welcomeMenu, label, buttonTable);
+
+        welcomeMenu.setVisible(false);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                welcomeMenu.setVisible(true);
+            }
+        },2f);
 
     }
 
@@ -574,15 +616,15 @@ public class GameplayScreen extends BasicScreen {
         stage.addActor(welcomeMenu);
     }
 
-    private void adjustWlcomeMenu(ScrollMenu welcomeMenu) {
+    private void adjustWelcomeMenu(ScrollMenu welcomeMenu) {
         welcomeMenu.setHeight(200);
-        welcomeMenu.setWidth(MyGame.GAME_WIDTH-50);
+        welcomeMenu.setWidth(MyGame.GAME_WIDTH - 50);
         welcomeMenu.setY(200);
         welcomeMenu.setX(25);
     }
 
     private void addExitWelcomeMenuHandler(final ScrollMenu welcomeMenu, Button noThanksButton) {
-        noThanksButton.addListener(new ClickListener(){
+        noThanksButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 welcomeMenu.setVisible(false);
@@ -592,10 +634,11 @@ public class GameplayScreen extends BasicScreen {
     }
 
     private void addWatchButtonHandler(Button watchAdButton) {
-        watchAdButton.addListener(new ClickListener(){
+        watchAdButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 myGame.showVideoAd();
+                isWelcomeVideoAd = true;
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -647,12 +690,37 @@ public class GameplayScreen extends BasicScreen {
     public void render(float delta) {
         super.render(delta);
         updateScore();
+        updateExtraBonusLabel();
+        addRewardForWelcomeAd();
 
         spriteBatch.begin();
         stage.draw();
         stage.act();
         spriteBatch.end();
 
+    }
+
+    private void updateExtraBonusLabel() {
+        if (extraBonusLabel != null)
+            extraBonusLabel.setText("Watch ad and get \n+" + watchedAdBasaltBonus + " basalts!");
+
+    }
+
+    private void addRewardForWelcomeAd() {
+        if (MyGame.adShown && isWelcomeVideoAd) {
+            MyGame.adShown = false;
+            isWelcomeVideoAd = false;
+            if (myGame.scoreService.getBasalt() == 0) {
+                myGame.scoreService.addToBasalt(basaltFirstRewardForVideoAd);
+            } else {
+                myGame.scoreService.addToBasalt(
+                        myGame.scoreService.getOfflineIncome() * basaltMultiplyRewardForVideoAd);
+            }
+            welcomeMenu.setVisible(false);
+        } else if (MyGame.adShown) {
+            MyGame.adShown = false;
+            myGame.scoreService.addToBasalt(watchedAdBasaltBonus);
+        }
     }
 
     private void updateScore() {

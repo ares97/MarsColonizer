@@ -1,12 +1,9 @@
 package com.mygdx.game.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.IClickCallback;
@@ -16,19 +13,9 @@ import com.mygdx.game.IClickCallback;
  */
 public class OptionsButton extends Button {
 
-    public OptionsButton(IClickCallback callback){
+    public OptionsButton(IClickCallback callback) {
         super(getButtonStyle());
         init(callback);
-    }
-
-    private void init(final IClickCallback callback) {
-        addListener(new ClickListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                callback.onClick();
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
     }
 
     private static ButtonStyle getButtonStyle() {
@@ -38,5 +25,15 @@ public class OptionsButton extends Button {
         buttonStyle.down = skin.getDrawable("icon_tools");
         buttonStyle.up = skin.getDrawable("icon_tools");
         return buttonStyle;
+    }
+
+    private void init(final IClickCallback callback) {
+        addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                callback.onClick();
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
     }
 }

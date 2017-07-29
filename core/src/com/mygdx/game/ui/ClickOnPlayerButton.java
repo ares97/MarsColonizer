@@ -10,7 +10,7 @@ import com.mygdx.game.entites.Player;
  * Created by ares on 25.07.17.
  */
 public class ClickOnPlayerButton extends Button {
-    public ClickOnPlayerButton(IClickCallback callback){
+    public ClickOnPlayerButton(IClickCallback callback) {
         super(new ButtonStyle());
         init(callback);
     }
@@ -22,7 +22,7 @@ public class ClickOnPlayerButton extends Button {
         setX(Player.STARTING_X);
         setY(Player.STARTING_Y);
 
-        addListener(new ClickListener(){
+        addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 callback.onClick();
