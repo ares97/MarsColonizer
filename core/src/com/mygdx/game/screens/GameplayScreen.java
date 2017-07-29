@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.IClickCallback;
 import com.mygdx.game.IShopCallback;
@@ -41,6 +41,7 @@ public class GameplayScreen extends BasicScreen {
     private SequenceAction onBuyActions;
     private java.util.Map<String, Boolean> itemToDisappear;
     private Preferences prefs;
+    private Array<Table> shopItems;
     Table shopContainer;
 
     public GameplayScreen(MyGame myGame) {
@@ -58,7 +59,6 @@ public class GameplayScreen extends BasicScreen {
         initFlyingObjectController();
         initPassiveIncome();
         initOptionsButton();
-        initShopDataFromPrefs();
         initShopMenuIcon();
         initShopMenu();
         InitOptions();
@@ -68,8 +68,8 @@ public class GameplayScreen extends BasicScreen {
     private void initShopDataFromPrefs() {
         itemToDisappear = new HashMap<String, Boolean>();
         prefs = Gdx.app.getPreferences(MyGame.GAME_PREFS);
-        for(ShopItems item : ShopItems.values()){
-            itemToDisappear.put(item.toString(),prefs.getBoolean(item.toString()));
+        for (ShopItems item : ShopItems.values()) {
+            itemToDisappear.put(item.toString(), prefs.getBoolean(item.toString()));
         }
     }
 
@@ -164,8 +164,11 @@ public class GameplayScreen extends BasicScreen {
     }
 
     private void resetShopData() {
-        for(ShopItems item : ShopItems.values()){
-            itemToDisappear.put(item.toString(),false);
+        for (ShopItems item : ShopItems.values()) {
+            itemToDisappear.put(item.toString(), false);
+        }
+        for (Table table : shopItems) {
+            table.setVisible(true);
         }
     }
 
@@ -188,14 +191,12 @@ public class GameplayScreen extends BasicScreen {
 
     private void initShopMenu() {
 
-
-
         gameMenu = new ScrollMenu();
         stage.addActor(gameMenu);
         gameMenu.setVisible(false);
         gameMenu.setStyle(new ScrollPane.ScrollPaneStyle(
                 gameMenu.skinGray.getDrawable("button_03"),
-                null, null, null, null
+                null, null, null, gameMenu.skinGray.getDrawable("slider_back_ver")
         ));
 
         initShopContent();
@@ -206,9 +207,8 @@ public class GameplayScreen extends BasicScreen {
         menuLabelStyle = new Label.LabelStyle(new BitmapFont(), Color.GOLD);
         shopContainer = new Table();
 
-        addBasaltDiamondExchange();
-        addBasaltPickaxe();
-        addWoodenPickaxe();
+        initShopDataFromPrefs();
+        initAddingItems();
 
 
         gameMenu.content.add(shopContainer);
@@ -216,28 +216,158 @@ public class GameplayScreen extends BasicScreen {
     }
 
 
+    private void initAddingItems() {
+        shopItems = new Array<Table>();
+        addBasaltDiamondExchange();
+        addOfflineIncome();
+        addWoodenPickaxe();
+        addBasaltPickaxe();
+        addSilverPickaxe();
+        addDiamondPickaxe();
+        addWorker();
+        addSmallShaft();
+        addBigShaft();
+    }
 
-    private void addBasaltPickaxe() {
-        itemToDisappear.put(ShopItems.BASALT_PICKAXE.toString(), false);
+    private void addOfflineIncome() {
         final int cost = 1;
-        final int bonus = 5;
+        final float bonus = 0.05f;
 
-        addItemToShop("img/basaltPickaxe.png",
-                "BASALT PICKAXE\n" + bonus + " basalt per click" +
+        addItemToShop("img/bed.png",
+                "Increase offline basalt income by "+bonus+ "%" +
+                        "\ncost: "+cost+" diamond",
+                new IShopCallback() {
+                    @Override
+                    public boolean isBuying() {
+                        if (myGame.scoreService.getDiamonds() >= cost) {
+                            myGame.scoreService.addToDiamonds(-cost);
+                            myGame.scoreService.addToOfflinePassiveMultiply(bonus);
+                        }
+                        return false;
+                    }
+                },ShopItems.OFFLINE_INCOME);
+    }
+
+    private void addBigShaft() {
+        final int cost = 125000;
+        final int bonus = 60;
+
+        addItemToShop("img/mineShaftBig.png",
+                "PROFESSIONAL MINING SHAFT\n+" + bonus + " basalt per second" +
+                        "\ncost: " + cost + " B",
+                new IShopCallback() {
+                    @Override
+                    public boolean isBuying() {
+                        if (myGame.scoreService.getBasalt() >= cost) {
+                            myGame.scoreService.addToBasalt(-cost);
+                            myGame.scoreService.addToPassiveBasalt(bonus);
+                            return true;
+                        }
+                        return false;
+                    }
+                },ShopItems.BIG_SHAFT);
+    }
+
+    private void addSmallShaft() {
+        final int cost = 9000;
+        final int bonus = 10;
+
+        addItemToShop("img/mineShaftSmall.png",
+                "SMALL MINING SHAFT\n+" + bonus + " basalt per second" +
+                        "\ncost: " + cost + " B",
+                new IShopCallback() {
+                    @Override
+                    public boolean isBuying() {
+                        if (myGame.scoreService.getBasalt() >= cost) {
+                            myGame.scoreService.addToBasalt(-cost);
+                            myGame.scoreService.addToPassiveBasalt(bonus);
+                            return true;
+                        }
+                        return false;
+                    }
+                },ShopItems.SILVER_PICKAXE);
+    }
+
+    private void addWorker() {
+        final int cost = 200;
+        final int bonus = 1;
+
+        addItemToShop("img/worker.png",
+                "worker\n+" + bonus + " basalt per second" +
                         "\ncost: " + cost + " B",
                 new IShopCallback() {
                     @Override
                     public boolean isBuying() {
                         if (myGame.scoreService.getBasalt() > cost) {
                             myGame.scoreService.addToBasalt(-cost);
-                            myGame.scoreService.setBasaltPerClick(bonus);
-                            itemToDisappear.put(ShopItems.BASALT_PICKAXE.toString(), true);
+                            myGame.scoreService.addToPassiveBasalt(bonus);
                             return true;
                         }
                         return false;
                     }
-                });
+                },ShopItems.WORKER);
+    }
 
+    private void addDiamondPickaxe() {
+        final int cost = 80000;
+        final int bonus = 100;
+
+        addItemToShop("img/diamondPickaxe.png",
+                "DIAMOND PICKAXE\n+" + bonus + " basalt per click" +
+                        "\ncost: " + cost + " B",
+                new IShopCallback() {
+                    @Override
+                    public boolean isBuying() {
+                        if (myGame.scoreService.getBasalt() >= cost) {
+                            myGame.scoreService.addToBasalt(-cost);
+                            myGame.scoreService.addToBasaltPerClick(bonus);
+                            return true;
+                        }
+                        return false;
+                    }
+                },ShopItems.DIAMOND_PICKAXE);
+    }
+
+    private void addSilverPickaxe() {
+        final int cost = 5000;
+        final int bonus = 10;
+
+        addItemToShop("img/silverPickaxe.png",
+                "SILVER PICKAXE\n+" + bonus + " basalt per click" +
+                        "\ncost: " + cost + " B",
+                new IShopCallback() {
+                    @Override
+                    public boolean isBuying() {
+                        if (myGame.scoreService.getBasalt() >= cost) {
+                            myGame.scoreService.addToBasalt(-cost);
+                            myGame.scoreService.addToBasaltPerClick(bonus);
+                            return true;
+                        }
+                        return false;
+                    }
+                },ShopItems.SILVER_PICKAXE);
+
+    }
+
+
+    private void addBasaltPickaxe() {
+        final int cost = 500;
+        final int bonus = 5;
+
+        addItemToShop("img/basaltPickaxe.png",
+                "BASALT PICKAXE\n+" + bonus + " basalt per click" +
+                        "\ncost: " + cost + " B",
+                new IShopCallback() {
+                    @Override
+                    public boolean isBuying() {
+                        if (myGame.scoreService.getBasalt() >= cost) {
+                            myGame.scoreService.addToBasalt(-cost);
+                            myGame.scoreService.addToBasaltPerClick(bonus);
+                            return true;
+                        }
+                        return false;
+                    }
+                },ShopItems.BASALT_PICKAXE);
 
     }
 
@@ -246,19 +376,18 @@ public class GameplayScreen extends BasicScreen {
         final int bonus = 2;
         // TODO improve description
         addItemToShop("img/woodenPickaxe.png",
-                "WOODEN PICKAXE\n 2 basalt per click\ncost: 150 B",
+                "WOODEN PICKAXE\n+2 basalt per click\ncost: 150 B",
                 new IShopCallback() {
                     @Override
                     public boolean isBuying() {
                         if (myGame.scoreService.getBasalt() >= woodenPickaxeCost) {
                             myGame.scoreService.addToBasalt(-woodenPickaxeCost);
-                            myGame.scoreService.setBasaltPerClick(bonus);
-                            itemToDisappear.put(ShopItems.WOODEN_PICKAXE.toString(), true);
+                            myGame.scoreService.addToBasaltPerClick(bonus);
                             return true;
                         }
                         return false;
                     }
-                });
+                }, ShopItems.WOODEN_PICKAXE);
     }
 
     private void addBasaltDiamondExchange() {
@@ -275,10 +404,10 @@ public class GameplayScreen extends BasicScreen {
                         }
                         return false;
                     }
-                });
+                }, ShopItems.DIAMOND);
     }
 
-    private void addItemToShop(String imgPath, String description, final IShopCallback callback) {
+    private void addItemToShop(String imgPath, String description, final IShopCallback callback, final ShopItems itemName) {
         final Table table = new Table();
         table.add(new Label("", menuLabelStyle)).height(70).fill();
         table.add(new Image(new Texture(imgPath))).setActorHeight(50);
@@ -291,20 +420,27 @@ public class GameplayScreen extends BasicScreen {
                 if (callback.isBuying()) {
                     table.addAction(Actions.sizeBy(25, 25));
                     table.setVisible(false);
-                    saveShopDataToPrefs();
+
+                    itemToDisappear.put(itemName.toString(),true);
+
                 }
 
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
+        if(itemToDisappear.get(itemName.toString())) {
+            table.setVisible(false);
+        }
+
+        shopItems.add(table);
         shopContainer.add(table).expand().fill();
         shopContainer.row();
     }
 
     private void saveShopDataToPrefs() {
-        for (ShopItems item : ShopItems.values()){
-            prefs.putBoolean(item.toString(),itemToDisappear.get(item.toString()));
+        for (ShopItems item : ShopItems.values()) {
+            prefs.putBoolean(item.toString(), itemToDisappear.get(item.toString()));
         }
         prefs.flush();
     }
@@ -411,7 +547,8 @@ public class GameplayScreen extends BasicScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        update();
+        updateScore();
+
         spriteBatch.begin();
         stage.draw();
         stage.act();
@@ -419,12 +556,14 @@ public class GameplayScreen extends BasicScreen {
 
     }
 
-    private void update() {
-        scoreLabel.setText("Basalt:  " + myGame.scoreService.getBasalt() +
+    private void updateScore() {
+        scoreLabel.setText("Basalt(B):  " + myGame.scoreService.getBasalt() +
                 "\n" + myGame.scoreService.getPassiveBasalt() + " basalt/sec" +
                 "\nDiamonds: " + myGame.scoreService.getDiamonds() +
-                "\nBasalt per click: " + myGame.scoreService.getBasaltPerClick());
-        stage.act();
+                "\nB per click: " + myGame.scoreService.getBasaltPerClick()+
+                "\nOffline B income: " +
+                String.format("%.2f",myGame.scoreService.getOfflineBasaltIncome())
+                + "/sec");
     }
 
 }

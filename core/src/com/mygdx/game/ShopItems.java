@@ -10,5 +10,7 @@ public enum ShopItems {
     DIAMOND_PICKAXE,
     WORKER,
     SMALL_SHAFT,
-    BIG_SHAFT
+    BIG_SHAFT,
+    DIAMOND,
+    OFFLINE_INCOME
 }

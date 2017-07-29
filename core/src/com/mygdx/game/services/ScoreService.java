@@ -19,7 +19,7 @@ public class ScoreService {
     public final static String LAST_ACTIVITY = "com.mygdx.game.prefs.lastActivity";
     public final static String OFFLINE_PASSIVE_MULTIPLY = "com.mygdx.game.prefs.offlinePassiveMultiply";
 
-    public final float STARTING_OFFLINE_INCOME_MULTIPLY = 0.1f;
+    public final float STARTING_OFFLINE_INCOME_MULTIPLY = 0.05f;
     public final int STARTING_BASALT_PER_CLICK = 1;
 
     private long basalt;
@@ -32,11 +32,16 @@ public class ScoreService {
     private void workOutPassiveIncomeWhileOffline() {
         long lastActivity = prefs.getLong(LAST_ACTIVITY);
         offlineIncome = TimeUtils.timeSinceMillis(lastActivity) / 1000; // mili -> sec
-        offlineIncome *= offlinePassiveIncomeMultiple;
-        offlineIncome *= passiveBasalt;
-        if (passiveBasalt > 0) {
-            offlineIncome *= passiveBasalt;
-        }
+        System.out.println(TimeUtils.timeSinceMillis(lastActivity)/1000);
+        offlineIncome *= getOfflineBasaltIncome();
+    }
+
+    public double getOfflineBasaltIncome() {
+        if (passiveBasalt < 1)
+            return offlinePassiveIncomeMultiple * 0.4f;
+
+        else
+            return offlinePassiveIncomeMultiple * passiveBasalt * 0.7;
     }
 
     public void resetScoreData() {
@@ -62,6 +67,10 @@ public class ScoreService {
         initPrefs();
         loadScoreDataFromPrefs();
         workOutPassiveIncomeWhileOffline();
+    }
+
+    public void addToBasaltPerClick(int x) {
+        basaltPerClick += x;
     }
 
     private void initPrefs() {
@@ -91,6 +100,10 @@ public class ScoreService {
         prefs.putFloat(OFFLINE_PASSIVE_MULTIPLY, offlinePassiveIncomeMultiple);
 
         prefs.flush();
+    }
+
+    public void addToOfflinePassiveMultiply(float x) {
+        offlinePassiveIncomeMultiple += x;
     }
 
     public void addBasaltForClick() {
