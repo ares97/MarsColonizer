@@ -39,18 +39,18 @@ public class SoundService {
     }
 
     public void playMusic() {
-            bgMusic.play();
-            bgMusic.setLooping(true);
+        bgMusic.play();
+        bgMusic.setLooping(true);
         if (!muteMusic) {
             bgMusic.setVolume(bgMusicVolume);
-        }
-        else {
+        } else {
             bgMusic.setVolume(0);
         }
     }
+
     public void playClick() {
         if (!muteSound) {
-            clickSound.setVolume(clickSound.play(), 0.2f);
+            clickSound.setVolume(clickSound.play(0.2f), 0.2f);
         }
     }
 
@@ -60,8 +60,8 @@ public class SoundService {
     }
 
     public void saveAudioToPrefs() {
-        prefs.putBoolean(MUTE_MUSIC,muteMusic);
-        prefs.putBoolean(MUTE_SOUND,muteSound);
+        prefs.putBoolean(MUTE_MUSIC, muteMusic);
+        prefs.putBoolean(MUTE_SOUND, muteSound);
         prefs.flush();
     }
 
@@ -69,14 +69,12 @@ public class SoundService {
         muteSound = mute;
     }
 
-    public void setMuteMusic(boolean mute)
-    {
+    public void setMuteMusic(boolean mute) {
         muteMusic = mute;
 
-        if(muteMusic){
+        if (muteMusic) {
             bgMusic.setVolume(0.0f);
-        }
-        else{
+        } else {
             bgMusic.setVolume(bgMusicVolume);
         }
     }

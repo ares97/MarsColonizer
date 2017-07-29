@@ -12,7 +12,9 @@ import com.mygdx.game.MyGame;
  */
 public class ScrollMenu extends ScrollPane {
     public Table content;
-    public Skin skin;
+    public Skin skinBlue;
+    public Skin skinGray;
+    public ScrollPaneStyle style;
 
     public ScrollMenu() {
         super(null);
@@ -20,16 +22,15 @@ public class ScrollMenu extends ScrollPane {
         initSkins();
         initStyle();
         initMenuContent();
-        addExitIcon();
     }
 
-    private void addExitIcon() {
-    }
 
     private void initStyle() {
-        setStyle(new ScrollPaneStyle(
-                skin.getDrawable("textbox_02"),
-                null,null,null,null));
+        style = new ScrollPaneStyle(
+                skinBlue.getDrawable("window_03"),
+                null,null,null,null);
+
+        setStyle(style);
 
         setWidth((float) (MyGame.GAME_WIDTH/1.5));
         setHeight((float) (MyGame.GAME_HEIGHT/1.5));
@@ -40,7 +41,9 @@ public class ScrollMenu extends ScrollPane {
 
     private void initSkins() {
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("img/ui-blue.atlas"));
-        skin = new Skin(atlas);
+        skinBlue = new Skin(atlas);
+        TextureAtlas atlasGray = new TextureAtlas(Gdx.files.internal("img/ui-gray.atlas"));
+        skinGray = new Skin(atlasGray);
     }
 
     private void initMenuContent() {

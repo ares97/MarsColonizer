@@ -17,7 +17,7 @@ public class OptionsMenu extends Actor {
     }
 
     private void initContent() {
-        menu.content.add(new Image(menu.skin.getDrawable("icon_sound_on")));
-        menu.content.add(new Image(menu.skin.getDrawable("icon_music")));
+        menu.content.add(new Image(menu.skinBlue.getDrawable("icon_sound_on")));
+        menu.content.add(new Image(menu.skinBlue.getDrawable("icon_music")));
     }
 }

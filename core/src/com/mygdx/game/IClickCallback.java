@@ -5,4 +5,5 @@ package com.mygdx.game;
  */
 public interface IClickCallback {
     void onClick();
+
 }
