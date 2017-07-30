@@ -17,6 +17,7 @@ public class SoundService {
     public boolean muteMusic;
     private Music bgMusic;
     private Sound clickSound;
+    private Sound shotSound;
     private float bgMusicVolume;
     private Preferences prefs;
 
@@ -28,7 +29,8 @@ public class SoundService {
         loadAudioDataFromPrefs();
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/bgMusic.ogg"));
         clickSound = Gdx.audio.newSound(Gdx.files.internal("audio/click.ogg"));
-        bgMusicVolume = 0.7f;
+        shotSound = Gdx.audio.newSound(Gdx.files.internal("audio/spaceShot.ogg"));
+        bgMusicVolume = 0.6f;
     }
 
     private void loadAudioDataFromPrefs() {
@@ -49,19 +51,26 @@ public class SoundService {
 
     public void playClick() {
         if (!muteSound) {
-            clickSound.setVolume(clickSound.play(0.2f), 0.2f);
+            clickSound.play(0.2f);
         }
     }
 
     public void disposeAudio() {
         bgMusic.dispose();
         clickSound.dispose();
+        shotSound.dispose();
     }
 
     public void saveAudioToPrefs() {
         prefs.putBoolean(MUTE_MUSIC, muteMusic);
         prefs.putBoolean(MUTE_SOUND, muteSound);
         prefs.flush();
+    }
+
+    public void playShot(){
+        if(!muteSound){
+            shotSound.play(0.2f);
+        }
     }
 
     public void setMuteSound(boolean mute) {

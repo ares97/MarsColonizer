@@ -327,7 +327,7 @@ public class GameplayScreen extends BasicScreen {
         final int bonus = 1;
 
         addItemToShop("img/worker.png",
-                "worker\n+" + bonus + " basalt per second" +
+                "MINER\n+" + bonus + " basalt per second" +
                         "\ncost: " + cost + " B",
                 new IShopCallback() {
                     @Override

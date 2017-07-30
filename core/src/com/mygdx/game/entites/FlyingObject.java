@@ -44,6 +44,7 @@ public class FlyingObject extends Image {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
                 reactOnClick();
+                myGame.soundService.playShot();
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
