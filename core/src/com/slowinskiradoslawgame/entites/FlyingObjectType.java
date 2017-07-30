@@ -1,4 +1,4 @@
-package com.slowinski.entites;
+package com.slowinskiradoslawgame.entites;
 
 /**
  * Created by ares on 25.07.17.

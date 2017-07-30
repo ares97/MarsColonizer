@@ -1,4 +1,4 @@
-package com.slowinski.ui;
+package com.slowinskiradoslawgame.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.slowinski.IClickCallback;
-import com.slowinski.MyGame;
+import com.slowinskiradoslawgame.IClickCallback;
+import com.slowinskiradoslawgame.MyGame;
 
 /**
  * Created by ares on 26.07.17.

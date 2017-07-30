@@ -1,4 +1,4 @@
-package com.slowinski;
+package com.slowinskiradoslawgame;
 
 /**
  * Created by ares on 25.07.17.

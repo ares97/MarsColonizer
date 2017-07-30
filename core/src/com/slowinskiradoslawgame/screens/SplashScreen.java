@@ -1,12 +1,11 @@
-package com.slowinski.screens;
+package com.slowinskiradoslawgame.screens;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Timer;
-import com.slowinski.MyGame;
-
-import static com.slowinski.entites.Player.*;
+import com.slowinskiradoslawgame.MyGame;
+import com.slowinskiradoslawgame.entites.Player;
 
 
 /**
@@ -47,8 +46,8 @@ public class SplashScreen extends BasicScreen {
     private void handleSplashAstronaut() {
         astronaut = new Image(new Texture("img/astronaut.png"));
         astronaut.setOrigin(MyGame.GAME_WIDTH / 2, MyGame.GAME_HEIGHT / 2);
-        astronaut.setSize(PLAYER_WIDTH, PLAYER_HEIGHT);
-        astronaut.setPosition(STARTING_X - 400, STARTING_Y + 30);
+        astronaut.setSize(Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT);
+        astronaut.setPosition(Player.STARTING_X - 400, Player.STARTING_Y + 30);
         astronaut.addAction(Actions.sizeBy(-250, -250, 5.5f));
         astronaut.addAction(Actions.rotateBy(90, 5.5f));
         stage.addActor(astronaut);
@@ -57,8 +56,8 @@ public class SplashScreen extends BasicScreen {
     private void handleSplashMars() {
         splashMars = new Image(new Texture("img/mars.png"));
         splashMars.setOrigin(MyGame.GAME_WIDTH / 2, MyGame.GAME_HEIGHT / 2);
-        splashMars.setSize(PLAYER_WIDTH, PLAYER_HEIGHT);
-        splashMars.setPosition(STARTING_X, STARTING_Y);
+        splashMars.setSize(Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT);
+        splashMars.setPosition(Player.STARTING_X, Player.STARTING_Y);
         stage.addActor(splashMars);
     }
 

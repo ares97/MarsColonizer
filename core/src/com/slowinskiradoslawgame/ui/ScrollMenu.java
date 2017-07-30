@@ -1,11 +1,11 @@
-package com.slowinski.ui;
+package com.slowinskiradoslawgame.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.slowinski.MyGame;
+import com.slowinskiradoslawgame.MyGame;
 
 /**
  * Created by ares on 27.07.17.

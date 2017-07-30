@@ -1,4 +1,4 @@
-package com.slowinski.screens;
+package com.slowinskiradoslawgame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -14,13 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
-import com.slowinski.IClickCallback;
-import com.slowinski.IShopCallback;
-import com.slowinski.MyGame;
-import com.slowinski.ShopItems;
-import com.slowinski.controllers.FlyingObjectsController;
-import com.slowinski.entites.Player;
-import com.slowinski.ui.*;
+import com.slowinskiradoslawgame.IClickCallback;
+import com.slowinskiradoslawgame.IShopCallback;
+import com.slowinskiradoslawgame.MyGame;
+import com.slowinskiradoslawgame.ShopItems;
+import com.slowinskiradoslawgame.controllers.FlyingObjectsController;
+import com.slowinskiradoslawgame.entites.Player;
+import com.slowinskiradoslawgame.ui.*;
 
 import java.util.HashMap;
 
@@ -45,6 +45,7 @@ public class GameplayScreen extends BasicScreen {
     private SequenceAction onBuyActions;
     private java.util.Map<String, Boolean> itemToDisappear;
     private Preferences prefs;
+    private boolean showFullScreenAd = true;
     private boolean isWelcomeVideoAd;
     private long watchedAdBasaltBonus;
     private Array<Table> shopItems;
@@ -524,6 +525,22 @@ public class GameplayScreen extends BasicScreen {
             }
         });
         optionsButton.setPosition(420, 550);
+        optionsButton.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(showFullScreenAd){
+                    myGame.showFullScreenAd();
+                    showFullScreenAd = false;
+                }
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        showFullScreenAd = true;
+                    }
+                },20);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
 
         stage.addActor(optionsButton);
     }

@@ -1,4 +1,4 @@
-package com.slowinski.entites;
+package com.slowinskiradoslawgame.entites;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.slowinski.IClickCallback;
-import com.slowinski.MyGame;
-import com.slowinski.ui.DialogMessage;
+import com.slowinskiradoslawgame.IClickCallback;
+import com.slowinskiradoslawgame.MyGame;
+import com.slowinskiradoslawgame.ui.DialogMessage;
 
 /**
  * Created by ares on 25.07.17.

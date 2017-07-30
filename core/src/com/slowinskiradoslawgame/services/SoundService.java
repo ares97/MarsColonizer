@@ -1,10 +1,10 @@
-package com.slowinski.services;
+package com.slowinskiradoslawgame.services;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.slowinski.MyGame;
+import com.slowinskiradoslawgame.MyGame;
 
 /**
  * Created by ares on 25.07.17.

@@ -1,9 +1,9 @@
-package com.slowinski;
+package com.slowinskiradoslawgame;
 
 import com.badlogic.gdx.Game;
-import com.slowinski.screens.SplashScreen;
-import com.slowinski.services.ScoreService;
-import com.slowinski.services.SoundService;
+import com.slowinskiradoslawgame.screens.SplashScreen;
+import com.slowinskiradoslawgame.services.ScoreService;
+import com.slowinskiradoslawgame.services.SoundService;
 
 public class MyGame extends Game {
     public final static String GAME_PREFS = "com.mygdx.game.prefs";
@@ -40,5 +40,9 @@ public class MyGame extends Game {
 
     public void showVideoAd() {
         handler.showAds(true);
+    }
+
+    public void showFullScreenAd() {
+        handler.showAds(false);
     }
 }

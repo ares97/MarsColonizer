@@ -1,10 +1,10 @@
-package com.slowinski.ui;
+package com.slowinskiradoslawgame.ui;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.slowinski.IClickCallback;
-import com.slowinski.entites.Player;
+import com.slowinskiradoslawgame.IClickCallback;
+import com.slowinskiradoslawgame.entites.Player;
 
 /**
  * Created by ares on 25.07.17.

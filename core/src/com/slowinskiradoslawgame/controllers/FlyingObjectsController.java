@@ -1,11 +1,11 @@
-package com.slowinski.controllers;
+package com.slowinskiradoslawgame.controllers;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
-import com.slowinski.MyGame;
-import com.slowinski.entites.FlyingObject;
-import com.slowinski.entites.FlyingObjectType;
+import com.slowinskiradoslawgame.MyGame;
+import com.slowinskiradoslawgame.entites.FlyingObject;
+import com.slowinskiradoslawgame.entites.FlyingObjectType;
 
 /**
  * Created by ares on 25.07.17.

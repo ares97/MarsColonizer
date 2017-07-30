@@ -38,17 +38,7 @@ allprojects {
     }
 }
 
-project(":desktop") {
-    apply plugin: "java"
 
-
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-
-    }
-}
 
 project(":android") {
     apply plugin: "android"
@@ -78,19 +68,6 @@ project(":core") {
     }
 }
 
-project(":html") {
-    apply plugin: "gwt"
-    apply plugin: "war"
-
-
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
-
-    }
-}
 
 tasks.eclipse.doLast {
     delete ".project"

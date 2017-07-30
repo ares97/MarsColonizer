@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.slowinski.radoslaw;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,10 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.*;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
@@ -22,17 +19,20 @@ import com.slowinskiradoslawgame.MyGame;
 
 public class AndroidLauncher extends AndroidApplication implements RewardedVideoAdListener, AdHandler {
     private static final String APP_ID = "ca-app-pub-5573564924159397~3593823754";
-    private static final String TAG = "AndroidLauncher";
     private static final String AD_UNIT_ID_VIDEO = "ca-app-pub-5573564924159397/6343177965";
-    private final int SHOW_ADS = 1;
-    private final int HIDE_ADS = 0;
+    private static final String AD_UNIT_ID_GRAPHIC = "ca-app-pub-5573564924159397/2766841131";
+    private static final String AD_UNIT_ID_BANNER = "ca-app-pub-5573564924159397/5727008983";
+    private final int SHOW_VID_AD = 1;
+    private final int SHOW_GRAPHIC_AD = 0;
+    private InterstitialAd mInterstitialAd;
+
     protected AdView adView;
     private RewardedVideoAd mRewardedVideoAd;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case SHOW_ADS:
+                case SHOW_VID_AD:
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -40,6 +40,17 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
                                 mRewardedVideoAd.show();
                         }
                     });
+                    break;
+                case SHOW_GRAPHIC_AD:
+                    if(mInterstitialAd.isLoaded()){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mInterstitialAd.show();
+                            }
+                        });
+                    }
+                    break;
             }
         }
     };
@@ -53,7 +64,7 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
         View gameView = initializeForView(new MyGame(new AdHandler() {
             @Override
             public void showAds(boolean show) {
-                handler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
+                handler.sendEmptyMessage(show ? SHOW_VID_AD : SHOW_GRAPHIC_AD);
             }
         }), config);
         relativeLayout.addView(gameView);
@@ -63,6 +74,15 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
         mRewardedVideoAd.setRewardedVideoAdListener(this);
         loadRewardedVideoAd();
 
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(AD_UNIT_ID_GRAPHIC);
+        mInterstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdClosed() {
+                loadFullScreenAd();
+                super.onAdClosed();
+            }
+        });
 
         addTopAd(relativeLayout);
         setContentView(relativeLayout);
@@ -71,7 +91,7 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
 
     private void loadRewardedVideoAd() {
         if (!mRewardedVideoAd.isLoaded()) {
-            mRewardedVideoAd.loadAd(AD_UNIT_ID_VIDEO, new AdRequest.Builder().addTestDevice("9FF1C33A9F8EC71970D48B9561468423").build());
+            mRewardedVideoAd.loadAd(AD_UNIT_ID_VIDEO, new AdRequest.Builder().build());
         }
 
     }
@@ -79,12 +99,9 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
     private void addTopAd(RelativeLayout relativeLayout) {
         adView = new AdView(this);
         adView.setAdSize(AdSize.SMART_BANNER);
-        adView.setAdUnitId("ca-app-pub-5573564924159397/5727008983");
+        adView.setAdUnitId(AD_UNIT_ID_BANNER);
 
         AdRequest.Builder builder = new AdRequest.Builder();
-        // ---------
-        builder.addTestDevice("9FF1C33A9F8EC71970D48B9561468423");
-        //  -------
 
         RelativeLayout.LayoutParams adParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -101,6 +118,11 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
 
     @Override
     public void onRewardedVideoAdLoaded() {
+        loadFullScreenAd();
+    }
+
+    private void loadFullScreenAd() {
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
     @Override
@@ -136,7 +158,7 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
     }
 
     @Override
-    public void showAds(boolean show) {
-        handler.sendEmptyMessage(show ? SHOW_ADS : HIDE_ADS);
+    public void showAds(boolean showVideoAd) {
+        handler.sendEmptyMessage(showVideoAd ? SHOW_VID_AD : SHOW_GRAPHIC_AD);
     }
 }
