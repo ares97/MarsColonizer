@@ -34,7 +34,7 @@ public class FlyingObjectsController {
                     }
                 }, spawnTime);
             }
-        }, 10, 5);
+        }, 10, 10);
     }
 
     private void randomizeSpawnTime() {

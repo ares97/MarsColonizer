@@ -50,7 +50,7 @@ public class GameplayScreen extends BasicScreen {
     private long watchedAdBasaltBonus;
     private Array<Table> shopItems;
     private Label extraBonusLabel;
-    private long basaltFirstRewardForVideoAd = 400;
+    private long basaltFirstRewardForVideoAd = 100;
     private int basaltMultiplyRewardForVideoAd; // 1 = 100%
 
     public GameplayScreen(MyGame myGame) {
@@ -244,16 +244,40 @@ public class GameplayScreen extends BasicScreen {
         addBasaltPickaxe();
         addSilverPickaxe();
         addDiamondPickaxe();
+        addJackHammer();
+        addBackhoe();
         addWorker();
+        addEfficientWorker();
         addSmallShaft();
         addBigShaft();
     }
 
+    private void addEfficientWorker() {
+        final int cost = 7000;
+        final int bonus = 5;
+
+        addItemToShop("img/worker2.png",
+                "EFFICIENT MINER\n+" + bonus + " basalt per second" +
+                        "\ncost: " + cost + " B",
+                new IShopCallback() {
+                    @Override
+                    public boolean isBuying() {
+                        if (myGame.scoreService.getBasalt() > cost) {
+                            myGame.scoreService.addToBasalt(-cost);
+                            myGame.scoreService.addToPassiveBasalt(bonus);
+                            return true;
+                        }
+                        return false;
+                    }
+                }, ShopItems.EFFICIENT_WORKER);
+    }
+
     private void addExtraBonus() {
-        watchedAdBasaltBonus = (long) (myGame.scoreService.getBasalt() * 0.35 + 5000);
+        watchedAdBasaltBonus = (long) (myGame.scoreService.getBasalt() * 0.35 + 100);
 
         addItemToShop("img/helmet.png",
-                "Watch ad and get \n+" + watchedAdBasaltBonus + " basalts!",
+                "Watch ad and get \n+" + watchedAdBasaltBonus + " basalts!" +
+                        "\n(max. once per 30min)",
                 new IShopCallback() {
                     @Override
                     public boolean isBuying() {
@@ -268,7 +292,7 @@ public class GameplayScreen extends BasicScreen {
         final float bonus = 0.05f;
 
         addItemToShop("img/bed.png",
-                "Increase offline basalt income by " + bonus + "%" +
+                "Increase offline basalt income\n by " + bonus + "%" +
                         "\ncost: " + cost + " diamond",
                 new IShopCallback() {
                     @Override
@@ -304,7 +328,7 @@ public class GameplayScreen extends BasicScreen {
     }
 
     private void addSmallShaft() {
-        final int cost = 9000;
+        final int cost = 14500;
         final int bonus = 10;
 
         addItemToShop("img/mineShaftSmall.png",
@@ -324,11 +348,11 @@ public class GameplayScreen extends BasicScreen {
     }
 
     private void addWorker() {
-        final int cost = 200;
+        final int cost = 300;
         final int bonus = 1;
 
         addItemToShop("img/worker.png",
-                "MINER\n+" + bonus + " basalt per second" +
+                "LAZY MINER\n+" + bonus + " basalt per second" +
                         "\ncost: " + cost + " B",
                 new IShopCallback() {
                     @Override
@@ -344,8 +368,8 @@ public class GameplayScreen extends BasicScreen {
     }
 
     private void addDiamondPickaxe() {
-        final int cost = 80000;
-        final int bonus = 100;
+        final int cost = 75000;
+        final int bonus = 80;
 
         addItemToShop("img/diamondPickaxe.png",
                 "DIAMOND PICKAXE\n+" + bonus + " basalt per click" +
@@ -361,6 +385,46 @@ public class GameplayScreen extends BasicScreen {
                         return false;
                     }
                 }, ShopItems.DIAMOND_PICKAXE);
+    }
+
+    private void addJackHammer() {
+        final int cost = 175000;
+        final int bonus = 625;
+
+        addItemToShop("img/smallHammer.png",
+                "JACK HAMMER\n+" + bonus + " basalt per click" +
+                        "\ncost: " + cost + " B",
+                new IShopCallback() {
+                    @Override
+                    public boolean isBuying() {
+                        if (myGame.scoreService.getBasalt() >= cost) {
+                            myGame.scoreService.addToBasalt(-cost);
+                            myGame.scoreService.addToBasaltPerClick(bonus);
+                            return true;
+                        }
+                        return false;
+                    }
+                }, ShopItems.JACK_HAMMER);
+    }
+
+    private void addBackhoe() {
+        final int cost = 1000000;
+        final int bonus = 2750;
+
+        addItemToShop("img/backhoe.png",
+                "BACKHOE\n+" + bonus + " basalt per click" +
+                        "\ncost: " + cost + " B",
+                new IShopCallback() {
+                    @Override
+                    public boolean isBuying() {
+                        if (myGame.scoreService.getBasalt() >= cost) {
+                            myGame.scoreService.addToBasalt(-cost);
+                            myGame.scoreService.addToBasaltPerClick(bonus);
+                            return true;
+                        }
+                        return false;
+                    }
+                }, ShopItems.BACKHOE);
     }
 
     private void addSilverPickaxe() {
@@ -427,15 +491,16 @@ public class GameplayScreen extends BasicScreen {
 
     private void addBasaltDiamondExchange() {
         // TODO improve description
-
+        final int cost = 5000;
+        final int reward = 5;
         addItemToShop("img/diamond.png",
-                "1000 basalt -> 1 diamond",
+                "exchange "+cost+" basalts \nfor "+reward+" diamonds",
                 new IShopCallback() {
                     @Override
                     public boolean isBuying() {
-                        if (myGame.scoreService.getBasalt() >= 1000) {
-                            myGame.scoreService.addToBasalt(-1000);
-                            myGame.scoreService.addToDiamonds(1);
+                        if (myGame.scoreService.getBasalt() >= cost) {
+                            myGame.scoreService.addToBasalt(-cost);
+                            myGame.scoreService.addToDiamonds(reward);
                             return true;
                         }
                         return false;
@@ -525,10 +590,10 @@ public class GameplayScreen extends BasicScreen {
             }
         });
         optionsButton.setPosition(420, 550);
-        optionsButton.addListener(new ClickListener(){
+        optionsButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(showFullScreenAd){
+                if (showFullScreenAd) {
                     myGame.showFullScreenAd();
                     showFullScreenAd = false;
                 }
@@ -537,7 +602,7 @@ public class GameplayScreen extends BasicScreen {
                     public void run() {
                         showFullScreenAd = true;
                     }
-                },20);
+                }, 20);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -587,21 +652,21 @@ public class GameplayScreen extends BasicScreen {
         noThanksButton.addActor(new Label("  NO, THANKS",
                 new Label.LabelStyle(new BitmapFont(), Color.GOLD)));
 
-
         Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(), Color.DARK_GRAY);
-        Label label = new Label("\n\nOFFLINE BA$ALT INCOME: " + ((long) (myGame.scoreService.getOfflineBasaltIncome())) + "!\n" +
-                "Watch ad to increase your offline income by 400%.",
+        Label label = new Label("\n\nOFFLINE BA$ALT INCOME: " + ((long) (myGame.scoreService.getOfflineIncome())) + "!\n" +
+                "Watch ad to increase your offline income by 300%.",
                 labelStyle);
 
-        basaltMultiplyRewardForVideoAd = 4; // 4 == 400%;
+        basaltMultiplyRewardForVideoAd = 3; // 4 == 400%;
 
-        if (((long) (myGame.scoreService.getOfflineBasaltIncome()) <= 1) && myGame.scoreService.getBasalt() > 0) {
-            basaltFirstRewardForVideoAd = myGame.scoreService.getBasalt() / 5 + 15;
-            label.setText("\n\nWatch ad and get " + basaltFirstRewardForVideoAd + " basalts");
+        basaltFirstRewardForVideoAd = myGame.scoreService.getBasalt() / 7 + 15;
+        if (((long) (myGame.scoreService.getOfflineIncome()) <= basaltFirstRewardForVideoAd)) {
+            label.setText("\n\nOFFLINE BA$ALT INCOME: " + ((long) (myGame.scoreService.getOfflineIncome()))
+                    + "\nWatch ad and get " + basaltFirstRewardForVideoAd + " basalts extra");
         }
 
         if (myGame.scoreService.getBasalt() == 0)
-            label.setText("\n\nLooks like you need some help\nWatch ad and get " + basaltFirstRewardForVideoAd + " basalts\n");
+            label.setText("\n\nLooks like you need some help\nWatch ad and get 100 basalts\n");
 
         addWatchButtonHandler(watchAdButton);
 
@@ -621,7 +686,9 @@ public class GameplayScreen extends BasicScreen {
             public void run() {
                 welcomeMenu.setVisible(true);
             }
-        },2f);
+        }, 0.8f);
+        welcomeMenu.addAction(Actions.rotateBy(360, 3.6f, Interpolation.circle));
+
 
     }
 

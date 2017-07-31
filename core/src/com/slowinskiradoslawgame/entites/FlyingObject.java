@@ -19,8 +19,8 @@ public class FlyingObject extends Image {
     private static final String ASTRONAUT = "img/astronaut.png";
     private static final String METEOR = "img/meteor.png";
     private static final String UFO = "img/ufo.png";
-    private final static int WIDTH = 75;
-    private final static int HEIGHT = 75;
+    private final static int WIDTH = 80;
+    private final static int HEIGHT = 80;
     private final static int STARTING_X_1 = 0;
     private final static int STARTING_X_2 = MyGame.GAME_WIDTH;
     private final static int STARTING_Y = -100;
@@ -82,6 +82,7 @@ public class FlyingObject extends Image {
             dialogMssg.setText("Just more basalt...\n(+75 basalt)", Color.GRAY);
         }
 
+        dialogMssg.setHeight(dialogMssg.getHeight()-60);
         getStage().addActor(dialogMssg);
         this.remove();
     }

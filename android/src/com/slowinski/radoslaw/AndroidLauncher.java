@@ -25,7 +25,7 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
     private final int SHOW_VID_AD = 1;
     private final int SHOW_GRAPHIC_AD = 0;
     private InterstitialAd mInterstitialAd;
-
+    // TODO shop's ad not loading when user watcher welcome's ad
     protected AdView adView;
     private RewardedVideoAd mRewardedVideoAd;
     Handler handler = new Handler() {
@@ -38,6 +38,9 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
                         public void run() {
                             if (mRewardedVideoAd.isLoaded())
                                 mRewardedVideoAd.show();
+                            else
+                                loadRewardedVideoAd();
+
                         }
                     });
                     break;
@@ -49,6 +52,9 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
                                 mInterstitialAd.show();
                             }
                         });
+                    }
+                    else {
+                        loadFullScreenAd();
                     }
                     break;
             }
@@ -82,6 +88,7 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
                 loadFullScreenAd();
                 super.onAdClosed();
             }
+
         });
 
         addTopAd(relativeLayout);
@@ -112,8 +119,13 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
     }
 
     private void keepScreenOn() {
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    @Override
+    protected void onPause() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        super.onPause();
     }
 
     @Override
@@ -153,7 +165,6 @@ public class AndroidLauncher extends AndroidApplication implements RewardedVideo
 
     @Override
     public void onRewardedVideoAdFailedToLoad(int i) {
-        Toast.makeText(this, "turn on internet", Toast.LENGTH_LONG).show();
         loadRewardedVideoAd();
     }
 
