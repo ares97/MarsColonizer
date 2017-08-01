@@ -654,10 +654,10 @@ public class GameplayScreen extends BasicScreen {
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(new BitmapFont(), Color.DARK_GRAY);
         Label label = new Label("\n\nOFFLINE BA$ALT INCOME: " + ((long) (myGame.scoreService.getOfflineIncome())) + "!\n" +
-                "Watch ad to increase your offline income by 300%.",
+                "Watch ad to increase your offline income by 200%.",
                 labelStyle);
 
-        basaltMultiplyRewardForVideoAd = 3; // 4 == 400%;
+        basaltMultiplyRewardForVideoAd = 2; //  2 == 200%;
 
         basaltFirstRewardForVideoAd = myGame.scoreService.getBasalt() / 7 + 15;
         if (((long) (myGame.scoreService.getOfflineIncome()) <= basaltFirstRewardForVideoAd)) {
